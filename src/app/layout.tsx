@@ -7,6 +7,9 @@ const inter = Inter({ subsets: ["latin"] });
 export const metadata: Metadata = {
   title: "AI Resume & LinkedIn Optimizer",
   description: "Optimize your resume and LinkedIn profile with AI.",
+  verification: {
+    google: "n1vEJ5TDbUtkniHrf6BBba-FUsNhrQ_lfxKAHiwalcQ",
+  },
 };
 
 export default function RootLayout({
