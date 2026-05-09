@@ -56,19 +56,19 @@ function ResultCard({ title, content, delay }: { title: string; content: string;
       transition={{ duration: 0.5, delay }}
       className="glass-card overflow-hidden"
     >
-      <div className="flex items-center justify-between p-4 border-b border-white/10 bg-white/5">
-        <h3 className="font-semibold text-lg text-white">{title}</h3>
+      <div className="flex items-center justify-between p-4 border-b border-zinc-200 bg-zinc-50/50">
+        <h3 className="font-semibold text-lg text-zinc-800">{title}</h3>
         <div className="flex items-center gap-2">
           <button
             onClick={handleCopy}
-            className="p-2 hover:bg-white/10 rounded-lg transition-colors text-zinc-400 hover:text-white"
+            className="p-2 hover:bg-zinc-200/50 rounded-lg transition-colors text-zinc-500 hover:text-zinc-800"
             title="Copy to clipboard"
           >
-            {copied ? <Check className="w-4 h-4 text-emerald-400" /> : <Copy className="w-4 h-4" />}
+            {copied ? <Check className="w-4 h-4 text-emerald-600" /> : <Copy className="w-4 h-4" />}
           </button>
           <button
             onClick={() => setExpanded(!expanded)}
-            className="p-2 hover:bg-white/10 rounded-lg transition-colors text-zinc-400 hover:text-white"
+            className="p-2 hover:bg-zinc-200/50 rounded-lg transition-colors text-zinc-500 hover:text-zinc-800"
           >
             {expanded ? <ChevronUp className="w-4 h-4" /> : <ChevronDown className="w-4 h-4" />}
           </button>
@@ -76,7 +76,7 @@ function ResultCard({ title, content, delay }: { title: string; content: string;
       </div>
       {expanded && (
         <div className="p-6">
-          <pre className="whitespace-pre-wrap font-sans text-zinc-300 leading-relaxed text-sm">
+          <pre className="whitespace-pre-wrap font-sans text-zinc-600 leading-relaxed text-sm">
             {content}
           </pre>
         </div>
@@ -102,21 +102,21 @@ function ListCard({ title, items, delay }: { title: string; items: string[]; del
       transition={{ duration: 0.5, delay }}
       className="glass-card flex flex-col h-full"
     >
-      <div className="flex items-center justify-between p-4 border-b border-white/10 bg-white/5">
-        <h3 className="font-semibold text-lg text-white">{title}</h3>
+      <div className="flex items-center justify-between p-4 border-b border-zinc-200 bg-zinc-50/50">
+        <h3 className="font-semibold text-lg text-zinc-800">{title}</h3>
         <button
           onClick={handleCopy}
-          className="p-2 hover:bg-white/10 rounded-lg transition-colors text-zinc-400 hover:text-white"
+          className="p-2 hover:bg-zinc-200/50 rounded-lg transition-colors text-zinc-500 hover:text-zinc-800"
           title="Copy to clipboard"
         >
-          {copied ? <Check className="w-4 h-4 text-emerald-400" /> : <Copy className="w-4 h-4" />}
+          {copied ? <Check className="w-4 h-4 text-emerald-600" /> : <Copy className="w-4 h-4" />}
         </button>
       </div>
       <div className="p-6 flex-grow">
         <ul className="space-y-3">
           {items.map((item, idx) => (
-            <li key={idx} className="flex gap-3 text-sm text-zinc-300">
-              <span className="text-violet-400 mt-1">•</span>
+            <li key={idx} className="flex gap-3 text-sm text-zinc-600">
+              <span className="text-teal-500 mt-1">•</span>
               <span className="leading-relaxed">{item}</span>
             </li>
           ))}

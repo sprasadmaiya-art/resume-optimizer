@@ -28,7 +28,7 @@ export default function OptimizerForm({ onSubmit, isLoading }: OptimizerFormProp
       className="glass-card p-6 md:p-8 w-full max-w-3xl mx-auto space-y-6"
     >
       <div className="space-y-2">
-        <label htmlFor="role" className="block text-sm font-medium text-zinc-300">
+        <label htmlFor="role" className="block text-sm font-medium text-zinc-700">
           Target Role
         </label>
         <input
@@ -37,14 +37,14 @@ export default function OptimizerForm({ onSubmit, isLoading }: OptimizerFormProp
           placeholder="e.g. Senior Frontend Developer, Product Manager"
           value={role}
           onChange={(e) => setRole(e.target.value)}
-          className="w-full bg-zinc-900/50 border border-white/10 rounded-xl px-4 py-3 text-white placeholder-zinc-500 focus:outline-none focus:ring-2 focus:ring-violet-500/50 transition-all"
+          className="w-full bg-white border border-zinc-200 rounded-xl px-4 py-3 text-zinc-900 placeholder-zinc-400 focus:outline-none focus:ring-2 focus:ring-teal-500/50 shadow-sm transition-all"
           disabled={isLoading}
           required
         />
       </div>
 
       <div className="space-y-2">
-        <label htmlFor="resume" className="block text-sm font-medium text-zinc-300">
+        <label htmlFor="resume" className="block text-sm font-medium text-zinc-700">
           Current Resume / Profile
         </label>
         <textarea
@@ -53,7 +53,7 @@ export default function OptimizerForm({ onSubmit, isLoading }: OptimizerFormProp
           value={resume}
           onChange={(e) => setResume(e.target.value)}
           rows={8}
-          className="w-full bg-zinc-900/50 border border-white/10 rounded-xl px-4 py-3 text-white placeholder-zinc-500 focus:outline-none focus:ring-2 focus:ring-violet-500/50 transition-all resize-none"
+          className="w-full bg-white border border-zinc-200 rounded-xl px-4 py-3 text-zinc-900 placeholder-zinc-400 focus:outline-none focus:ring-2 focus:ring-teal-500/50 shadow-sm transition-all resize-none"
           disabled={isLoading}
           required
         />
@@ -62,10 +62,9 @@ export default function OptimizerForm({ onSubmit, isLoading }: OptimizerFormProp
       <button
         type="submit"
         disabled={isLoading || !resume.trim() || !role.trim()}
-        className="w-full relative group overflow-hidden rounded-xl bg-gradient-to-r from-violet-600 to-cyan-600 p-[1px] disabled:opacity-50 disabled:cursor-not-allowed transition-all"
+        className="w-full relative group overflow-hidden rounded-xl bg-gradient-to-r from-teal-500 to-indigo-500 disabled:opacity-50 disabled:cursor-not-allowed transition-all shadow-md hover:shadow-lg hover:-translate-y-0.5"
       >
-        <div className="absolute inset-0 bg-gradient-to-r from-violet-600 to-cyan-600 opacity-0 group-hover:opacity-100 transition-opacity duration-300 blur-md" />
-        <div className="relative bg-zinc-950/80 px-6 py-4 rounded-xl flex items-center justify-center gap-2 transition-all group-hover:bg-transparent">
+        <div className="relative px-6 py-4 rounded-xl flex items-center justify-center gap-2 transition-all">
           {isLoading ? (
             <Loader2 className="w-5 h-5 text-white animate-spin" />
           ) : (

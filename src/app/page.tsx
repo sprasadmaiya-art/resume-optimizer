@@ -42,7 +42,7 @@ export default function Home() {
           initial={{ opacity: 0, scale: 0.9 }}
           animate={{ opacity: 1, scale: 1 }}
           transition={{ duration: 0.5 }}
-          className="inline-flex items-center gap-2 px-4 py-2 rounded-full glass-card text-sm font-medium text-violet-300 mb-4"
+          className="inline-flex items-center gap-2 px-4 py-2 rounded-full bg-teal-50 border border-teal-100 text-sm font-medium text-teal-700 mb-4 shadow-sm"
         >
           <Sparkles className="w-4 h-4" />
           <span>Powered by Google Gemini</span>
@@ -62,7 +62,7 @@ export default function Home() {
           initial={{ opacity: 0, y: 20 }}
           animate={{ opacity: 1, y: 0 }}
           transition={{ duration: 0.5, delay: 0.2 }}
-          className="text-lg md:text-xl text-zinc-400 max-w-2xl mx-auto leading-relaxed"
+          className="text-lg md:text-xl text-zinc-600 max-w-2xl mx-auto leading-relaxed"
         >
           Transform your resume and LinkedIn profile instantly. Tailor your experience 
           to your dream role with intelligent insights and perfect phrasing.
@@ -90,7 +90,7 @@ export default function Home() {
           <motion.div
             initial={{ opacity: 0 }}
             animate={{ opacity: 1 }}
-            className="mt-8 p-4 bg-red-500/10 border border-red-500/20 rounded-xl text-red-400 text-center max-w-3xl mx-auto"
+            className="mt-8 p-4 bg-red-50 border border-red-200 rounded-xl text-red-600 text-center max-w-3xl mx-auto shadow-sm"
           >
             {error}
           </motion.div>
@@ -104,8 +104,8 @@ export default function Home() {
 
 function FeaturePill({ icon, text }: { icon: React.ReactNode; text: string }) {
   return (
-    <div className="flex items-center gap-2 px-4 py-2 rounded-full bg-white/5 border border-white/10 text-zinc-300 text-sm backdrop-blur-sm">
-      <span className="text-violet-400">{icon}</span>
+    <div className="flex items-center gap-2 px-4 py-2 rounded-full bg-white border border-zinc-200 text-zinc-700 text-sm shadow-sm transition-shadow hover:shadow-md">
+      <span className="text-teal-500">{icon}</span>
       <span>{text}</span>
     </div>
   );

@@ -24,8 +24,8 @@
 }
 
 :root {
-  --background: #09090b; /* Zinc 950 */
-  --foreground: #fafafa; /* Zinc 50 */
+  --background: #fafafa; /* Zinc 50 */
+  --foreground: #09090b; /* Zinc 950 */
 }
 
 body {
@@ -37,13 +37,13 @@ body {
 
 @layer utilities {
   .glass {
-    @apply bg-white/5 backdrop-blur-xl border border-white/10 shadow-xl;
+    @apply bg-white/70 backdrop-blur-xl border border-zinc-200/50 shadow-xl;
   }
   .glass-card {
-    @apply bg-white/[0.02] backdrop-blur-md border border-white/5 rounded-2xl shadow-[0_8px_32px_0_rgba(0,0,0,0.37)];
+    @apply bg-white border border-zinc-200 rounded-2xl shadow-sm hover:shadow-md transition-shadow duration-300;
   }
   .text-gradient {
-    @apply bg-clip-text text-transparent bg-gradient-to-r from-violet-400 via-fuchsia-400 to-cyan-400;
+    @apply bg-clip-text text-transparent bg-gradient-to-r from-indigo-600 via-purple-600 to-teal-500;
   }
   .bg-gradient-radial {
     background-image: radial-gradient(var(--tw-gradient-stops));
