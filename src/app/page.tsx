@@ -5,13 +5,16 @@ import { motion } from "framer-motion";
 import OptimizerForm from "@/components/OptimizerForm";
 import ResultsDisplay from "@/components/ResultsDisplay";
 import { Sparkles, FileText, UserCircle, Target } from "lucide-react";
+import { usePostHog } from 'posthog-js/react';
 
 export default function Home() {
   const [isLoading, setIsLoading] = useState(false);
   const [results, setResults] = useState(null);
   const [error, setError] = useState<string | null>(null);
+  const posthog = usePostHog();
 
   const handleOptimize = async (resume: string, role: string) => {
+    posthog.capture('optimize_clicked', { target_role: role });
     setIsLoading(true);
     setError(null);
     try {
@@ -27,6 +30,7 @@ export default function Home() {
 
       const data = await response.json();
       setResults(data);
+      posthog.capture('resume_generated', { target_role: role });
     } catch (err: any) {
       setError(err.message || "An unexpected error occurred.");
     } finally {
