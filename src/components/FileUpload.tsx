@@ -1,7 +1,7 @@
 "use client";
 
 import { useState, useCallback } from "react";
-import { UploadCloud, File, Loader2, AlertCircle, CheckCircle2 } from "lucide-react";
+import { UploadCloud, Loader2, AlertCircle, CheckCircle2 } from "lucide-react";
 import { usePostHog } from "posthog-js/react";
 import { cn } from "@/lib/utils";
 
@@ -9,6 +9,8 @@ interface FileUploadProps {
   onTextExtracted: (text: string) => void;
   isLoading: boolean;
 }
+
+const MAX_FILE_SIZE = 4 * 1024 * 1024; // 4MB
 
 export default function FileUpload({ onTextExtracted, isLoading: externalLoading }: FileUploadProps) {
   const [isDragging, setIsDragging] = useState(false);
@@ -30,6 +32,11 @@ export default function FileUpload({ onTextExtracted, isLoading: externalLoading
   const processFile = async (file: File) => {
     if (!file) return;
 
+    if (file.size > MAX_FILE_SIZE) {
+      setError("File exceeds the 4MB limit. Please upload a smaller file.");
+      return;
+    }
+
     setIsUploading(true);
     setError(null);
     setSuccess(false);
@@ -43,12 +50,18 @@ export default function FileUpload({ onTextExtracted, isLoading: externalLoading
         body: formData,
       });
 
-      if (!res.ok) {
-        const errorData = await res.json();
-        throw new Error(errorData.error || "Failed to parse file.");
+      const contentType = res.headers.get("content-type");
+      if (!contentType || !contentType.includes("application/json")) {
+        // Handle Vercel 413 Payload Too Large HTML response or other unexpected errors
+        throw new Error("Server returned an unexpected response (the file might still be too large).");
       }
 
       const data = await res.json();
+      
+      if (!res.ok || !data.success) {
+        throw new Error(data.error || "Failed to parse file.");
+      }
+
       onTextExtracted(data.text);
       setSuccess(true);
       posthog.capture("resume_uploaded", { file_type: file.type || "unknown" });
@@ -111,15 +124,15 @@ export default function FileUpload({ onTextExtracted, isLoading: externalLoading
             <p className="text-sm font-medium text-zinc-700">
               {isLoading ? "Parsing resume..." : "Click to upload or drag and drop"}
             </p>
-            <p className="text-xs text-zinc-500 mt-1">PDF, DOCX, or TXT (max. 10MB)</p>
+            <p className="text-xs text-zinc-500 mt-1">PDF, DOCX, or TXT (max. 4MB)</p>
           </div>
         </div>
       </div>
 
       {error && (
         <div className="flex items-center gap-2 mt-3 text-sm text-red-600">
-          <AlertCircle className="w-4 h-4" />
-          <span>{error}</span>
+          <AlertCircle className="w-4 h-4 shrink-0" />
+          <span className="leading-tight">{error}</span>
         </div>
       )}
     </div>

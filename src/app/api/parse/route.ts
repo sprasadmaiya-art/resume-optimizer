@@ -1,6 +1,8 @@
 import { NextResponse } from "next/server";
-
 import mammoth from "mammoth";
+
+// Vercel serverless functions have a 4.5MB payload limit. We limit to 4MB here.
+const MAX_FILE_SIZE = 4 * 1024 * 1024; // 4MB
 
 export async function POST(req: Request) {
   try {
@@ -8,7 +10,11 @@ export async function POST(req: Request) {
     const file = formData.get("file") as File;
 
     if (!file) {
-      return NextResponse.json({ error: "No file uploaded" }, { status: 400 });
+      return NextResponse.json({ success: false, error: "No file uploaded." }, { status: 400 });
+    }
+
+    if (file.size > MAX_FILE_SIZE) {
+      return NextResponse.json({ success: false, error: "File exceeds the 4MB limit." }, { status: 413 });
     }
 
     const buffer = Buffer.from(await file.arrayBuffer());
@@ -31,20 +37,20 @@ export async function POST(req: Request) {
       text = buffer.toString("utf-8");
     } else {
       return NextResponse.json(
-        { error: "Unsupported file type. Please upload a PDF, DOCX, or TXT file." },
+        { success: false, error: "Unsupported file type. Please upload a PDF, DOCX, or TXT file." },
         { status: 400 }
       );
     }
 
     if (!text || text.trim() === "") {
-      return NextResponse.json({ error: "Could not extract text from file" }, { status: 400 });
+      return NextResponse.json({ success: false, error: "Could not extract text from the file. It may be empty or an image-based PDF." }, { status: 400 });
     }
 
-    return NextResponse.json({ text: text.trim() });
+    return NextResponse.json({ success: true, text: text.trim() });
   } catch (error: any) {
     console.error("Error parsing file:", error);
     return NextResponse.json(
-      { error: error.message || "Failed to parse file" },
+      { success: false, error: error.message || "An unexpected error occurred while parsing the file." },
       { status: 500 }
     );
   }
