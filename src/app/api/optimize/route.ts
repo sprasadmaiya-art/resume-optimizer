@@ -1,13 +1,11 @@
 import { NextResponse } from "next/server";
 import { GoogleGenAI } from "@google/genai";
 
-// Initialize the Google Gen AI client
-// It automatically picks up GEMINI_API_KEY from environment variables
 const ai = new GoogleGenAI({ apiKey: process.env.GEMINI_API_KEY });
 
 export async function POST(req: Request) {
   try {
-    const { resume, role } = await req.json();
+    const { resume, role, skills } = await req.json();
 
     if (!resume || !role) {
       return NextResponse.json(
@@ -16,14 +14,29 @@ export async function POST(req: Request) {
       );
     }
 
+    const skillsContext = skills && skills.length > 0 
+      ? `\nThe user also provided these specific skills they possess: ${skills.join(", ")}\nPlease ensure these are highlighted where relevant.` 
+      : "";
+
     const prompt = `
-You are an expert career coach and professional resume writer.
-Your task is to optimize a user's resume for a specific target role.
+You are an expert career coach, ATS system analyzer, and professional resume writer.
+Your task is to analyze and optimize a user's resume for a specific target role.
 You must return the result as a raw JSON object (without any markdown formatting like \`\`\`json) with the exact following structure:
 {
+  "atsScore": 85, // A number between 0 and 100 representing ATS compatibility.
+  "atsScoreCategory": "Good", // Must be exactly one of: "Poor", "Average", "Good", "Excellent".
+  "scoreAnalysis": {
+    "keywordMatch": "Brief analysis of how well their keywords match the role.",
+    "formatting": "Brief analysis of their resume's formatting for ATS parsers.",
+    "missingSkills": "Brief analysis of any major skills they are missing.",
+    "overall": "A 1-2 sentence overall summary of their ATS compatibility."
+  },
+  "feedback": ["Recruiter tip 1", "Recruiter tip 2", "Recruiter tip 3"], // 3 actionable tips for improvement.
+  "missingKeywords": ["Keyword 1", "Keyword 2"], // Array of missing keywords relevant to the role.
+  "weakSections": ["Section 1 name", "Section 2 name"], // Array of sections that need improvement.
   "optimizedResume": "A full, professional rewrite of their resume tailored to the target role. Format with clear headings, bullet points, and spacing.",
   "linkedinAbout": "A compelling, first-person LinkedIn About section (2-3 paragraphs) highlighting their fit for the target role.",
-  "skills": ["Skill 1", "Skill 2", "Skill 3"], // Array of 8-12 highly relevant keywords/skills for ATS optimization
+  "skills": ["Skill 1", "Skill 2"], // Array of 8-12 highly relevant keywords/skills for ATS optimization
   "achievements": ["Achievement 1", "Achievement 2"] // Array of 3-5 high-impact, quantifiable bullet points they can add to their experience
 }
 
@@ -35,7 +48,7 @@ ${resume}
 Here is the target role they are applying for:
 ---
 ${role}
----
+---${skillsContext}
 
 Ensure the tone is professional, confident, and persuasive. Provide the raw JSON only.
 `;
@@ -53,7 +66,6 @@ Ensure the tone is professional, confident, and persuasive. Provide the raw JSON
       throw new Error("No response generated from AI.");
     }
 
-    // Attempt to parse the JSON
     let parsedData;
     try {
       parsedData = JSON.parse(text);

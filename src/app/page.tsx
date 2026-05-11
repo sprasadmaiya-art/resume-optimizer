@@ -4,7 +4,7 @@ import { useState } from "react";
 import { motion } from "framer-motion";
 import OptimizerForm from "@/components/OptimizerForm";
 import ResultsDisplay from "@/components/ResultsDisplay";
-import { Sparkles, FileText, UserCircle, Target } from "lucide-react";
+import { Sparkles, FileText, UserCircle, Target, BarChart } from "lucide-react";
 import { usePostHog } from 'posthog-js/react';
 
 export default function Home() {
@@ -13,7 +13,7 @@ export default function Home() {
   const [error, setError] = useState<string | null>(null);
   const posthog = usePostHog();
 
-  const handleOptimize = async (resume: string, role: string) => {
+  const handleOptimize = async (resume: string, role: string, skills: string[]) => {
     posthog.capture('optimize_clicked', { target_role: role });
     setIsLoading(true);
     setError(null);
@@ -21,7 +21,7 @@ export default function Home() {
       const response = await fetch("/api/optimize", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ resume, role }),
+        body: JSON.stringify({ resume, role, skills }),
       });
 
       if (!response.ok) {
@@ -31,6 +31,14 @@ export default function Home() {
       const data = await response.json();
       setResults(data);
       posthog.capture('resume_generated', { target_role: role });
+      
+      if (data.atsScore) {
+        posthog.capture('ats_score_generated', { 
+          score: data.atsScore, 
+          category: data.atsScoreCategory,
+          target_role: role
+        });
+      }
     } catch (err: any) {
       setError(err.message || "An unexpected error occurred.");
     } finally {
@@ -49,7 +57,7 @@ export default function Home() {
           className="inline-flex items-center gap-2 px-4 py-2 rounded-full bg-teal-50 border border-teal-100 text-sm font-medium text-teal-700 mb-4 shadow-sm"
         >
           <Sparkles className="w-4 h-4" />
-          <span>Powered by Google Gemini</span>
+          <span>Powered by Google Gemini 2.5 Flash</span>
         </motion.div>
         
         <motion.h1
@@ -59,7 +67,7 @@ export default function Home() {
           className="text-4xl md:text-6xl font-extrabold tracking-tight"
         >
           Supercharge Your Career with <br className="hidden md:block" />
-          <span className="text-gradient">AI-Powered Optimization</span>
+          <span className="text-gradient">AI ATS Optimization</span>
         </motion.h1>
         
         <motion.p
@@ -68,8 +76,7 @@ export default function Home() {
           transition={{ duration: 0.5, delay: 0.2 }}
           className="text-lg md:text-xl text-zinc-600 max-w-2xl mx-auto leading-relaxed"
         >
-          Transform your resume and LinkedIn profile instantly. Tailor your experience 
-          to your dream role with intelligent insights and perfect phrasing.
+          Upload your resume and get an instant ATS compatibility score, complete with recruiter feedback, optimized formatting, and targeted skills.
         </motion.p>
       </div>
 
@@ -80,23 +87,23 @@ export default function Home() {
         transition={{ duration: 0.5, delay: 0.3 }}
         className="flex flex-wrap justify-center gap-4 mb-16"
       >
+        <FeaturePill icon={<BarChart size={18} />} text="ATS Scoring" />
         <FeaturePill icon={<FileText size={18} />} text="Resume Revamp" />
+        <FeaturePill icon={<Target size={18} />} text="Skill Matching" />
         <FeaturePill icon={<UserCircle size={18} />} text="LinkedIn About" />
-        <FeaturePill icon={<Target size={18} />} text="Targeted Skills" />
-        <FeaturePill icon={<Sparkles size={18} />} text="Action Bullets" />
       </motion.div>
 
       {/* Main App Section */}
-      <div className="w-full max-w-6xl mx-auto">
+      <div className="w-full max-w-6xl mx-auto flex flex-col items-center">
         <OptimizerForm onSubmit={handleOptimize} isLoading={isLoading} />
         
         {error && (
           <motion.div
             initial={{ opacity: 0 }}
             animate={{ opacity: 1 }}
-            className="mt-8 p-4 bg-red-50 border border-red-200 rounded-xl text-red-600 text-center max-w-3xl mx-auto shadow-sm"
+            className="mt-8 w-full max-w-3xl p-4 bg-red-50 border border-red-200 rounded-xl text-red-600 text-center shadow-sm flex items-center justify-center gap-2"
           >
-            {error}
+            <span>{error}</span>
           </motion.div>
         )}
 
