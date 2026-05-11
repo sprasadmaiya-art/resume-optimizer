@@ -13,24 +13,30 @@ export default function Home() {
   const [error, setError] = useState<string | null>(null);
   const posthog = usePostHog();
 
-  const handleOptimize = async (resume: string, role: string, skills: string[]) => {
+  const handleOptimize = async (resume: string, jobDescription: string, role: string, skills: string[]) => {
     posthog.capture('optimize_clicked', { target_role: role });
+    if (jobDescription) {
+      posthog.capture('job_description_added', { target_role: role });
+    }
+    
     setIsLoading(true);
     setError(null);
     try {
       const response = await fetch("/api/optimize", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ resume, role, skills }),
+        body: JSON.stringify({ resume, jobDescription, role, skills }),
       });
 
       if (!response.ok) {
-        throw new Error("Failed to optimize resume. Please try again.");
+        throw new Error("Failed to generate ATS match analysis. Please try again.");
       }
 
       const data = await response.json();
       setResults(data);
-      posthog.capture('resume_generated', { target_role: role });
+      
+      posthog.capture('ats_match_generated', { target_role: role });
+      posthog.capture('keyword_analysis_generated');
       
       if (data.atsScore) {
         posthog.capture('ats_score_generated', { 
@@ -49,7 +55,7 @@ export default function Home() {
   return (
     <main className="min-h-screen py-20 px-4 sm:px-6 lg:px-8 flex flex-col items-center">
       {/* Hero Section */}
-      <div className="text-center max-w-3xl mx-auto mb-16 space-y-6">
+      <div className="text-center max-w-4xl mx-auto mb-16 space-y-6">
         <motion.div
           initial={{ opacity: 0, scale: 0.9 }}
           animate={{ opacity: 1, scale: 1 }}
@@ -64,10 +70,10 @@ export default function Home() {
           initial={{ opacity: 0, y: 20 }}
           animate={{ opacity: 1, y: 0 }}
           transition={{ duration: 0.5, delay: 0.1 }}
-          className="text-4xl md:text-6xl font-extrabold tracking-tight"
+          className="text-4xl md:text-6xl font-extrabold tracking-tight leading-tight"
         >
-          Supercharge Your Career with <br className="hidden md:block" />
-          <span className="text-gradient">AI ATS Optimization</span>
+          Match Your Resume Against <br className="hidden md:block" />
+          <span className="text-gradient">Any Job Description</span>
         </motion.h1>
         
         <motion.p
@@ -76,7 +82,7 @@ export default function Home() {
           transition={{ duration: 0.5, delay: 0.2 }}
           className="text-lg md:text-xl text-zinc-600 max-w-2xl mx-auto leading-relaxed"
         >
-          Upload your resume and get an instant ATS compatibility score, complete with recruiter feedback, optimized formatting, and targeted skills.
+          Upload your resume and the target job description to get an instant ATS match score, keyword gap analysis, and an AI-optimized resume tailored specifically for the role.
         </motion.p>
       </div>
 
@@ -87,10 +93,10 @@ export default function Home() {
         transition={{ duration: 0.5, delay: 0.3 }}
         className="flex flex-wrap justify-center gap-4 mb-16"
       >
-        <FeaturePill icon={<BarChart size={18} />} text="ATS Scoring" />
-        <FeaturePill icon={<FileText size={18} />} text="Resume Revamp" />
-        <FeaturePill icon={<Target size={18} />} text="Skill Matching" />
-        <FeaturePill icon={<UserCircle size={18} />} text="LinkedIn About" />
+        <FeaturePill icon={<BarChart size={18} />} text="ATS Match Scoring" />
+        <FeaturePill icon={<Target size={18} />} text="Keyword Gap Analysis" />
+        <FeaturePill icon={<FileText size={18} />} text="Resume Optimization" />
+        <FeaturePill icon={<UserCircle size={18} />} text="Interview Readiness" />
       </motion.div>
 
       {/* Main App Section */}
@@ -117,7 +123,7 @@ function FeaturePill({ icon, text }: { icon: React.ReactNode; text: string }) {
   return (
     <div className="flex items-center gap-2 px-4 py-2 rounded-full bg-white border border-zinc-200 text-zinc-700 text-sm shadow-sm transition-shadow hover:shadow-md">
       <span className="text-teal-500">{icon}</span>
-      <span>{text}</span>
+      <span className="font-medium">{text}</span>
     </div>
   );
 }
