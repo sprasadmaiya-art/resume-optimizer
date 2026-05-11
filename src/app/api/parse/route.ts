@@ -24,7 +24,8 @@ export async function POST(req: Request) {
     const fileName = file.name.toLowerCase();
 
     if (mimeType === "application/pdf" || fileName.endsWith(".pdf")) {
-      const pdfParse = (await import("pdf-parse")).default || (await import("pdf-parse"));
+      // @ts-ignore
+      const pdfParse = (await import("pdf-parse-debugging-disabled")).default || (await import("pdf-parse-debugging-disabled"));
       const pdfData = await (typeof pdfParse === "function" ? pdfParse(buffer) : (pdfParse as any)(buffer));
       text = pdfData.text;
     } else if (
