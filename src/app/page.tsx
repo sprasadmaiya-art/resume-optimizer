@@ -4,7 +4,7 @@ import { useState } from "react";
 import { motion } from "framer-motion";
 import OptimizerForm from "@/components/OptimizerForm";
 import ResultsDisplay from "@/components/ResultsDisplay";
-import { Sparkles, FileText, UserCircle, Target, BarChart } from "lucide-react";
+import { Sparkles, FileText, UserCircle, Target, BarChart, MessageSquare } from "lucide-react";
 import { usePostHog } from 'posthog-js/react';
 
 export default function Home() {
@@ -35,13 +35,15 @@ export default function Home() {
       const data = await response.json();
       setResults(data);
       
-      posthog.capture('ats_match_generated', { target_role: role });
-      posthog.capture('keyword_analysis_generated');
+      posthog.capture('job_match_generated', { target_role: role });
+      posthog.capture('recruiter_analysis_generated');
+      posthog.capture('interview_prep_generated');
+      posthog.capture('career_recommendations_generated');
       
-      if (data.atsScore) {
+      if (data.match?.atsScore) {
         posthog.capture('ats_score_generated', { 
-          score: data.atsScore, 
-          category: data.atsScoreCategory,
+          score: data.match.atsScore, 
+          category: data.match.atsScoreCategory,
           target_role: role
         });
       }
@@ -72,8 +74,8 @@ export default function Home() {
           transition={{ duration: 0.5, delay: 0.1 }}
           className="text-4xl md:text-6xl font-extrabold tracking-tight leading-tight"
         >
-          Match Your Resume Against <br className="hidden md:block" />
-          <span className="text-gradient">Any Job Description</span>
+          Your Personal AI <br className="hidden md:block" />
+          <span className="text-gradient">Career Intelligence Platform</span>
         </motion.h1>
         
         <motion.p
@@ -82,7 +84,7 @@ export default function Home() {
           transition={{ duration: 0.5, delay: 0.2 }}
           className="text-lg md:text-xl text-zinc-600 max-w-2xl mx-auto leading-relaxed"
         >
-          Upload your resume and the target job description to get an instant ATS match score, keyword gap analysis, and an AI-optimized resume tailored specifically for the role.
+          Stop guessing. Get instant recruiter feedback, customized interview prep, deep job matching, and AI-optimized resumes tailored to your dream role.
         </motion.p>
       </div>
 
@@ -93,10 +95,10 @@ export default function Home() {
         transition={{ duration: 0.5, delay: 0.3 }}
         className="flex flex-wrap justify-center gap-4 mb-16"
       >
-        <FeaturePill icon={<BarChart size={18} />} text="ATS Match Scoring" />
-        <FeaturePill icon={<Target size={18} />} text="Keyword Gap Analysis" />
-        <FeaturePill icon={<FileText size={18} />} text="Resume Optimization" />
-        <FeaturePill icon={<UserCircle size={18} />} text="Interview Readiness" />
+        <FeaturePill icon={<Target size={18} />} text="Job Match Engine" />
+        <FeaturePill icon={<UserCircle size={18} />} text="Recruiter AI" />
+        <FeaturePill icon={<MessageSquare size={18} />} text="Interview Prep" />
+        <FeaturePill icon={<BarChart size={18} />} text="Career Insights" />
       </motion.div>
 
       {/* Main App Section */}

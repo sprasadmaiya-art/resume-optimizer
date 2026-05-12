@@ -2,41 +2,27 @@
 
 import { motion } from "framer-motion";
 import { 
-  AlertTriangle, CheckCircle, TrendingUp, Search, Info, 
-  Target, Zap, ListChecks, Award, Briefcase, FileSearch
+  AlertTriangle, CheckCircle, Target, FileSearch, Zap, TrendingUp
 } from "lucide-react";
 import { cn } from "@/lib/utils";
 
 interface AtsScoreCardProps {
-  score: number;
-  category: "Poor" | "Average" | "Good" | "Excellent";
-  analysis: {
-    keywordMatch: string;
-    formatting: string;
-    missingSkills: string;
-    overall: string;
+  match: {
+    atsScore: number;
+    atsScoreCategory: "Poor" | "Average" | "Good" | "Excellent";
+    jobMatchPercentage: number;
+    skillStrengthScore: number;
+    missingSkills: string[];
+    matchingSkills: string[];
+    strengths: string[];
+    weakAreas: string[];
+    recommendedImprovements: string[];
   };
-  strengths?: string[];
-  interviewChance?: string;
-  interviewReadiness?: string;
-  improvementChecklist?: string[];
-  feedback: string[];
-  missingKeywords: string[];
-  weakSections: string[];
 }
 
-export default function AtsScoreCard({
-  score,
-  category,
-  analysis,
-  strengths = [],
-  interviewChance,
-  interviewReadiness,
-  improvementChecklist = [],
-  feedback,
-  missingKeywords,
-  weakSections,
-}: AtsScoreCardProps) {
+export default function AtsScoreCard({ match }: AtsScoreCardProps) {
+  if (!match) return null;
+
   const colorMap = {
     Poor: "text-red-500",
     Average: "text-amber-500",
@@ -58,13 +44,13 @@ export default function AtsScoreCard({
     Excellent: "#10b981",
   };
 
-  const currentStrokeColor = strokeColorMap[category] || strokeColorMap.Average;
-  const currentTextColor = colorMap[category] || colorMap.Average;
-  const currentBgColor = bgMap[category] || bgMap.Average;
+  const currentStrokeColor = strokeColorMap[match.atsScoreCategory] || strokeColorMap.Average;
+  const currentTextColor = colorMap[match.atsScoreCategory] || colorMap.Average;
+  const currentBgColor = bgMap[match.atsScoreCategory] || bgMap.Average;
 
   const radius = 60;
   const circumference = 2 * Math.PI * radius;
-  const strokeDashoffset = circumference - (score / 100) * circumference;
+  const strokeDashoffset = circumference - (match.atsScore / 100) * circumference;
 
   return (
     <div className="w-full space-y-6">
@@ -94,174 +80,126 @@ export default function AtsScoreCard({
             </svg>
             <div className="absolute inset-0 flex flex-col items-center justify-center">
               <span className={cn("text-5xl font-extrabold tracking-tighter", currentTextColor)}>
-                {score}
+                {match.atsScore}
               </span>
               <span className="text-xs font-semibold text-zinc-500 uppercase tracking-widest mt-1">
                 / 100
               </span>
             </div>
           </div>
-          <h3 className={cn("text-xl font-bold mb-1", currentTextColor)}>{category} Match</h3>
-          <p className="text-sm text-zinc-600 font-medium flex items-center justify-center gap-1.5 mt-2">
-            <Target className="w-4 h-4" />
-            Against Job Description
-          </p>
+          <h3 className={cn("text-xl font-bold mb-1", currentTextColor)}>{match.atsScoreCategory} ATS Match</h3>
         </div>
 
-        {/* Analysis & Interview Chance */}
-        <div className="col-span-1 md:col-span-2 flex flex-col gap-6">
-          <div className="glass-card p-6 flex-1 flex flex-col justify-center">
-            <h3 className="font-semibold text-lg text-zinc-800 flex items-center gap-2 mb-4">
-              <Search className="w-5 h-5 text-indigo-500" />
-              Match Analysis
-            </h3>
-            <div className="space-y-3">
-              <AnalysisItem label="Keyword Match" value={analysis.keywordMatch} />
-              <AnalysisItem label="Formatting" value={analysis.formatting} />
-              <AnalysisItem label="Skills Assessment" value={analysis.missingSkills} />
+        {/* Holistic Scores */}
+        <div className="col-span-1 md:col-span-2 grid grid-cols-1 sm:grid-cols-2 gap-6">
+          <div className="glass-card p-6 flex flex-col justify-center items-center text-center bg-gradient-to-br from-indigo-50 to-purple-50 border-indigo-100">
+            <Target className="w-8 h-8 text-indigo-500 mb-3" />
+            <p className="text-sm font-semibold text-indigo-600 uppercase tracking-wider mb-2">Overall Job Match</p>
+            <div className="flex items-baseline gap-1">
+              <span className="text-4xl font-extrabold text-indigo-900">{match.jobMatchPercentage}</span>
+              <span className="text-xl font-bold text-indigo-500">%</span>
+            </div>
+            <div className="w-full max-w-[150px] bg-indigo-200 h-1.5 rounded-full mt-4 overflow-hidden">
+              <div className="bg-indigo-600 h-full rounded-full transition-all duration-1000" style={{ width: `${match.jobMatchPercentage}%` }} />
             </div>
           </div>
 
-          <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
-            {interviewChance && (
-              <div className="glass-card p-4 flex items-center gap-4 bg-gradient-to-br from-indigo-50 to-purple-50 border-indigo-100">
-                <div className="p-3 bg-indigo-100 text-indigo-600 rounded-xl">
-                  <Award className="w-6 h-6" />
-                </div>
-                <div>
-                  <p className="text-xs font-semibold text-indigo-500 uppercase tracking-wider mb-1">Interview Chance</p>
-                  <p className="text-xl font-bold text-indigo-900">{interviewChance}</p>
-                </div>
-              </div>
-            )}
-            
-            <div className="glass-card p-4 flex items-center gap-4 bg-gradient-to-br from-teal-50 to-emerald-50 border-teal-100">
-              <div className="p-3 bg-teal-100 text-teal-600 rounded-xl">
-                <Briefcase className="w-6 h-6" />
-              </div>
-              <div className="flex-1">
-                <p className="text-xs font-semibold text-teal-600 uppercase tracking-wider mb-1">Overall Alignment</p>
-                <p className="text-sm font-medium text-teal-900 leading-tight line-clamp-2">
-                  {analysis.overall}
-                </p>
-              </div>
+          <div className="glass-card p-6 flex flex-col justify-center items-center text-center bg-gradient-to-br from-blue-50 to-cyan-50 border-blue-100">
+            <Zap className="w-8 h-8 text-blue-500 mb-3" />
+            <p className="text-sm font-semibold text-blue-600 uppercase tracking-wider mb-2">Skill Strength Score</p>
+            <div className="flex items-baseline gap-1">
+              <span className="text-4xl font-extrabold text-blue-900">{match.skillStrengthScore}</span>
+              <span className="text-xl font-bold text-blue-500">/ 100</span>
+            </div>
+            <div className="w-full max-w-[150px] bg-blue-200 h-1.5 rounded-full mt-4 overflow-hidden">
+              <div className="bg-blue-600 h-full rounded-full transition-all duration-1000" style={{ width: `${match.skillStrengthScore}%` }} />
             </div>
           </div>
         </div>
       </div>
 
-      {/* Middle Level: Strengths vs Weaknesses */}
+      {/* Skills Gap Analysis */}
       <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
         <div className="glass-card p-6 border-t-4 border-t-emerald-400">
           <h3 className="font-semibold text-lg text-zinc-800 flex items-center gap-2 mb-4">
-            <Zap className="w-5 h-5 text-emerald-500" />
-            Top Strengths
+            <CheckCircle className="w-5 h-5 text-emerald-500" />
+            Matching Skills
           </h3>
-          <ul className="space-y-3">
-            {strengths.map((str, idx) => (
-              <li key={idx} className="flex gap-3 text-sm text-zinc-600 items-start">
-                <CheckCircle className="w-4 h-4 text-emerald-500 shrink-0 mt-0.5" />
-                <span>{str}</span>
-              </li>
+          <div className="flex flex-wrap gap-2">
+            {match.matchingSkills.map((kw, idx) => (
+              <span key={idx} className="px-3 py-1.5 rounded-lg bg-emerald-50 text-emerald-700 text-sm font-medium border border-emerald-100 shadow-sm">
+                {kw}
+              </span>
             ))}
-            {strengths.length === 0 && (
-              <span className="text-sm text-zinc-500 italic">No major strengths identified against this specific JD.</span>
-            )}
-          </ul>
+          </div>
         </div>
 
         <div className="glass-card p-6 border-t-4 border-t-red-400">
           <h3 className="font-semibold text-lg text-zinc-800 flex items-center gap-2 mb-4">
-            <TrendingUp className="w-5 h-5 text-red-500" />
-            Weak Sections & Gaps
+            <FileSearch className="w-5 h-5 text-red-500" />
+            Missing Skills (Gap)
           </h3>
-          <ul className="space-y-3">
-            {weakSections.map((section, idx) => (
-              <li key={idx} className="flex gap-3 text-sm text-zinc-600 items-start">
-                <AlertTriangle className="w-4 h-4 text-red-500 shrink-0 mt-0.5" />
-                <span>{section}</span>
-              </li>
+          <div className="flex flex-wrap gap-2">
+            {match.missingSkills.map((kw, idx) => (
+              <span key={idx} className="px-3 py-1.5 rounded-lg bg-red-50 text-red-700 text-sm font-medium border border-red-100 shadow-sm">
+                {kw}
+              </span>
             ))}
-            {weakSections.length === 0 && (
-              <span className="text-sm text-zinc-500 italic">No weak sections found!</span>
-            )}
-          </ul>
-        </div>
-      </div>
-
-      {/* Keyword Analysis */}
-      <div className="glass-card p-6 bg-amber-50/30 border-amber-100">
-        <h3 className="font-semibold text-lg text-zinc-800 flex items-center gap-2 mb-4">
-          <FileSearch className="w-5 h-5 text-amber-500" />
-          Missing JD Keywords
-        </h3>
-        <p className="text-sm text-zinc-600 mb-4">These keywords appear in the job description but are missing or underrepresented in your resume.</p>
-        <div className="flex flex-wrap gap-2">
-          {missingKeywords.map((kw, idx) => (
-            <span key={idx} className="px-3 py-1.5 rounded-lg bg-amber-100 text-amber-800 text-sm font-medium border border-amber-200 shadow-sm">
-              {kw}
-            </span>
-          ))}
-          {missingKeywords.length === 0 && (
-            <span className="text-sm text-zinc-500 bg-white px-3 py-1.5 rounded-lg border">No major keywords missing! Great job.</span>
-          )}
-        </div>
-      </div>
-
-      {/* Bottom Level: Recruiter Insights & Checklist */}
-      <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
-        <div className="lg:col-span-1 glass-card p-6 bg-zinc-900 text-white">
-          <h3 className="font-semibold text-lg flex items-center gap-2 mb-4 text-zinc-100">
-            <Info className="w-5 h-5 text-teal-400" />
-            Recruiter Insights
-          </h3>
-          <ul className="space-y-4">
-            {feedback.map((tip, idx) => (
-              <li key={idx} className="flex gap-3 text-sm text-zinc-300">
-                <div className="w-1.5 h-1.5 rounded-full bg-teal-500 shrink-0 mt-1.5" />
-                <span className="leading-relaxed">{tip}</span>
-              </li>
-            ))}
-          </ul>
-          
-          {interviewReadiness && (
-            <div className="mt-6 pt-6 border-t border-zinc-800">
-              <p className="text-xs font-semibold text-zinc-500 uppercase tracking-wider mb-2">Interview Readiness</p>
-              <p className="text-sm text-zinc-300 leading-relaxed">{interviewReadiness}</p>
-            </div>
-          )}
-        </div>
-
-        <div className="lg:col-span-2 glass-card p-6">
-          <h3 className="font-semibold text-lg text-zinc-800 flex items-center gap-2 mb-4">
-            <ListChecks className="w-5 h-5 text-indigo-500" />
-            Improvement Checklist
-          </h3>
-          <p className="text-sm text-zinc-500 mb-5">Follow these specific steps to improve your ATS match score for this role.</p>
-          <div className="space-y-3">
-            {improvementChecklist.map((item, idx) => (
-              <div key={idx} className="flex items-start gap-3 p-3 rounded-xl hover:bg-zinc-50 transition-colors border border-transparent hover:border-zinc-100">
-                <div className="flex items-center justify-center w-6 h-6 rounded-full bg-indigo-100 text-indigo-700 text-xs font-bold shrink-0 mt-0.5">
-                  {idx + 1}
-                </div>
-                <p className="text-sm text-zinc-700 leading-relaxed">{item}</p>
-              </div>
-            ))}
-            {improvementChecklist.length === 0 && (
-              <p className="text-sm text-zinc-500 italic p-3">Your resume is perfectly optimized!</p>
-            )}
           </div>
         </div>
       </div>
-    </div>
-  );
-}
 
-function AnalysisItem({ label, value }: { label: string; value: string }) {
-  return (
-    <div className="flex flex-col sm:flex-row sm:items-baseline gap-1 sm:gap-3 text-sm pb-2 border-b border-zinc-100 last:border-0 last:pb-0">
-      <span className="font-semibold text-zinc-700 min-w-[140px]">{label}:</span>
-      <span className="text-zinc-600 leading-relaxed">{value}</span>
+      {/* Strengths & Weaknesses */}
+      <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+        <div className="glass-card p-6 bg-zinc-50 border border-zinc-200">
+          <h3 className="font-semibold text-lg text-zinc-800 flex items-center gap-2 mb-4">
+            <TrendingUp className="w-5 h-5 text-zinc-700" />
+            Resume Strengths
+          </h3>
+          <ul className="space-y-3">
+            {match.strengths.map((str, idx) => (
+              <li key={idx} className="flex gap-3 text-sm text-zinc-600 items-start">
+                <span className="text-zinc-400 font-bold shrink-0">•</span>
+                <span>{str}</span>
+              </li>
+            ))}
+          </ul>
+        </div>
+
+        <div className="glass-card p-6 bg-amber-50/30 border border-amber-100">
+          <h3 className="font-semibold text-lg text-amber-900 flex items-center gap-2 mb-4">
+            <AlertTriangle className="w-5 h-5 text-amber-500" />
+            Weak Areas
+          </h3>
+          <ul className="space-y-3">
+            {match.weakAreas.map((weak, idx) => (
+              <li key={idx} className="flex gap-3 text-sm text-amber-800 items-start">
+                <span className="text-amber-500 font-bold shrink-0">•</span>
+                <span>{weak}</span>
+              </li>
+            ))}
+          </ul>
+        </div>
+      </div>
+
+      {/* Recommended Improvements */}
+      <div className="glass-card p-6 bg-zinc-900 text-white">
+        <h3 className="font-semibold text-lg flex items-center gap-2 mb-4">
+          <Zap className="w-5 h-5 text-yellow-400" />
+          Recommended Improvements
+        </h3>
+        <ul className="space-y-3">
+          {match.recommendedImprovements.map((imp, idx) => (
+            <li key={idx} className="flex gap-3 text-sm text-zinc-300 items-start">
+              <div className="w-5 h-5 rounded-full bg-yellow-400/20 text-yellow-400 flex items-center justify-center text-xs font-bold shrink-0">
+                {idx + 1}
+              </div>
+              <span className="leading-relaxed mt-0.5">{imp}</span>
+            </li>
+          ))}
+        </ul>
+      </div>
+
     </div>
   );
 }

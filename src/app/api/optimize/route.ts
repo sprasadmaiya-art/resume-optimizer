@@ -1,6 +1,9 @@
 import { NextResponse } from "next/server";
 import { GoogleGenAI } from "@google/genai";
 
+// Allow longer execution time for the massive prompt (Vercel specific)
+export const maxDuration = 60;
+
 const ai = new GoogleGenAI({ apiKey: process.env.GEMINI_API_KEY });
 
 export async function POST(req: Request) {
@@ -19,30 +22,54 @@ export async function POST(req: Request) {
       : "";
 
     const prompt = `
-You are an elite Executive Recruiter, ATS Systems Expert, and Career Coach.
+You are an elite Career Intelligence AI. Your role encompasses being an Expert ATS system, an Executive Recruiter, a Technical Interviewer, and a Career Strategist.
 Your task is to deeply analyze a user's resume against a specific Job Description and target role.
 
 You must return the result as a raw JSON object (without any markdown formatting like \`\`\`json) with the exact following structure:
 {
-  "atsScore": 85, // A number between 0 and 100 representing how well the resume matches the Job Description.
-  "atsScoreCategory": "Good", // Must be exactly one of: "Poor", "Average", "Good", "Excellent".
-  "scoreAnalysis": {
-    "keywordMatch": "Analysis of how well their keywords match the specific Job Description requirements.",
-    "formatting": "Brief analysis of their resume's formatting for ATS parsers.",
-    "missingSkills": "Analysis of major skills required by the JD that are missing from the resume.",
-    "overall": "A 1-2 sentence overall summary of their match."
+  "match": {
+    "atsScore": 85, // A number between 0 and 100 representing how well the resume matches the JD.
+    "atsScoreCategory": "Good", // Must be exactly one of: "Poor", "Average", "Good", "Excellent".
+    "jobMatchPercentage": 80, // Overall holistic match percentage (0-100).
+    "skillStrengthScore": 75, // How strong their skills are relative to the JD requirements (0-100).
+    "missingSkills": ["Skill 1", "Skill 2"], // Critical skills from the JD missing in the resume.
+    "matchingSkills": ["Skill 3", "Skill 4"], // Skills they successfully demonstrated.
+    "strengths": ["Strength 1", "Strength 2"], // 2-3 areas where the resume strongly aligns with the JD.
+    "weakAreas": ["Weakness 1", "Weakness 2"], // 2-3 areas that need immediate improvement.
+    "recommendedImprovements": ["Action 1", "Action 2"] // Actionable steps to fix the weak areas.
   },
-  "strengths": ["Strength 1", "Strength 2"], // 2-3 areas where the resume strongly aligns with the JD.
-  "interviewChance": "High", // A short qualitative string, e.g., "High", "Medium", "Low", or "80%".
-  "interviewReadiness": "Feedback on how ready they are for an interview based on the JD requirements.",
-  "feedback": ["Recruiter tip 1", "Recruiter tip 2", "Recruiter tip 3"], // 3 actionable tips for improvement based on the JD.
-  "missingKeywords": ["Keyword 1", "Keyword 2"], // Array of missing keywords specifically found in the JD.
-  "weakSections": ["Section 1 name", "Section 2 name"], // Array of resume sections that need improvement.
-  "improvementChecklist": ["Step 1 to improve", "Step 2 to improve", "Step 3 to improve"], // 3-5 step-by-step actionable items to align perfectly with the JD.
-  "optimizedResume": "A full, professional rewrite of their resume tailored precisely to the Job Description. Format with clear headings, bullet points, and spacing.",
-  "linkedinAbout": "A compelling, first-person LinkedIn About section (2-3 paragraphs) highlighting their fit for this specific type of role.",
-  "skills": ["Skill 1", "Skill 2"], // Array of 8-12 highly relevant keywords/skills extracted from the JD that the user should add.
-  "achievements": ["Achievement 1", "Achievement 2"] // Array of 3-5 high-impact, quantifiable bullet points tailored to the JD requirements.
+  "recruiterSimulator": {
+    "firstImpression": "A 1-2 sentence honest first impression a recruiter would have.",
+    "likelyConcerns": ["Concern 1", "Concern 2"], // Things a recruiter might flag as a risk.
+    "readabilityFeedback": "Feedback on formatting, density, and ease of scanning.",
+    "scanningBehavior": "What a recruiter's eyes will gravitate to first on this resume.",
+    "noticesFirst": ["Detail 1", "Detail 2"], // The most prominent details.
+    "rejectionRisks": ["Risk 1", "Risk 2"] // Why they might pass on this candidate.
+  },
+  "interviewPrep": {
+    "difficultyScore": 8, // Estimated interview difficulty out of 10.
+    "readinessPercentage": 65, // How ready they seem based on their resume (0-100).
+    "technicalQuestions": ["Question 1", "Question 2"], // Likely technical/hard-skill questions based on the JD.
+    "hrQuestions": ["Question 1", "Question 2"], // Likely behavioral/HR questions.
+    "projectQuestions": ["Question 1", "Question 2"], // Questions directly targeting their resume projects/experience.
+    "weakAreaQuestions": ["Question 1", "Question 2"], // Questions probing their missing skills or weak areas.
+    "confidenceTips": ["Tip 1", "Tip 2"] // Psychological/confidence tips tailored to them.
+  },
+  "careerRecommendations": {
+    "suitableRoles": ["Role 1", "Role 2"], // Alternative or next-step roles they are suited for.
+    "highDemandSkills": ["Skill 1", "Skill 2"], // General high-demand skills in this field right now.
+    "careerGrowthSuggestions": ["Suggestion 1", "Suggestion 2"], // Long-term strategic advice.
+    "recommendedCertifications": ["Cert 1", "Cert 2"], // Specific certs to boost their profile.
+    "salaryGrowthSuggestions": "Advice on how to position themselves for higher compensation.",
+    "learningRoadmap": ["Step 1", "Step 2", "Step 3"], // A quick 3-step learning path.
+    "suggestedCareerPaths": ["Path 1", "Path 2"], // Potential trajectories (e.g. IC vs Management).
+    "mostValuableSkillNext": "The single most impactful skill they should learn tomorrow."
+  },
+  "optimization": {
+    "optimizedResume": "A full, professional rewrite of their resume tailored precisely to the Job Description. Use powerful action verbs and quantify achievements.",
+    "linkedinAbout": "A compelling, first-person LinkedIn About section (2-3 paragraphs) highlighting their fit.",
+    "achievements": ["Achievement 1", "Achievement 2"] // 3-5 high-impact, quantifiable bullet points they can copy-paste.
+  }
 }
 
 Here is the user's current resume/profile information:
@@ -60,7 +87,7 @@ Here is the target role title:
 ${role}
 ---${skillsContext}
 
-Analyze the gaps critically. Be professional, direct, and persuasive in the optimized content. Provide the raw JSON only.
+Provide a harsh but constructive, deeply insightful analysis. Provide the raw JSON only.
 `;
 
     const response = await ai.models.generateContent({
@@ -88,7 +115,7 @@ Analyze the gaps critically. Be professional, direct, and persuasive in the opti
   } catch (error: any) {
     console.error("Error optimizing resume:", error);
     return NextResponse.json(
-      { error: error.message || "Failed to optimize resume." },
+      { error: error.message || "Failed to generate Career Intelligence Report." },
       { status: 500 }
     );
   }
