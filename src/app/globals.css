@@ -53,3 +53,28 @@ body {
     background-image: radial-gradient(var(--tw-gradient-stops));
   }
 }
+
+/* Dark mode overrides for the app section */
+.dark #app-section .text-zinc-900,
+.dark #app-section .text-zinc-800,
+.dark #app-section .text-zinc-700 {
+  color: #f4f4f5 !important; /* zinc-100 */
+}
+
+.dark #app-section .text-zinc-600,
+.dark #app-section .text-zinc-500 {
+  color: #a1a1aa !important; /* zinc-400 */
+}
+
+.dark #app-section .bg-white {
+  background-color: #18181b !important; /* zinc-900 */
+  border-color: #27272a !important; /* zinc-800 */
+}
+
+.dark #app-section .bg-zinc-50 {
+  background-color: #09090b !important; /* zinc-950 */
+}
+
+.dark #app-section .border-zinc-200 {
+  border-color: #27272a !important; /* zinc-800 */
+}

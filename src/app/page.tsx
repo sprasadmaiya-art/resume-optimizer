@@ -170,19 +170,7 @@ export default function Home() {
         </motion.div>
       </section>
 
-      {/* --- LOGO CLOUD --- */}
-      <section className="py-10 border-y border-zinc-200 dark:border-zinc-800/50 bg-white/50 dark:bg-zinc-900/20 backdrop-blur-sm">
-        <div className="max-w-7xl mx-auto px-4 text-center">
-          <p className="text-sm font-semibold text-zinc-500 dark:text-zinc-400 uppercase tracking-wider mb-6">Trusted by ambitious professionals from</p>
-          <div className="flex flex-wrap justify-center items-center gap-8 md:gap-16 opacity-50 grayscale hover:grayscale-0 transition-all duration-500">
-             <span className="font-heading font-bold text-xl">Google</span>
-             <span className="font-heading font-bold text-xl">Microsoft</span>
-             <span className="font-heading font-bold text-xl">Amazon</span>
-             <span className="font-heading font-bold text-xl">Meta</span>
-             <span className="font-heading font-bold text-xl">Apple</span>
-          </div>
-        </div>
-      </section>
+
 
       {/* --- FEATURES SHOWCASE --- */}
       <section id="features" className="py-24 px-4 sm:px-6 lg:px-8 max-w-7xl mx-auto space-y-32">
@@ -229,32 +217,7 @@ export default function Home() {
         />
       </section>
 
-      {/* --- TESTIMONIALS --- */}
-      <section className="py-24 bg-zinc-900 dark:bg-black text-white relative overflow-hidden">
-        <div className="absolute top-0 right-0 w-96 h-96 bg-teal-500/20 rounded-full blur-[120px]" />
-        <div className="absolute bottom-0 left-0 w-96 h-96 bg-indigo-500/20 rounded-full blur-[120px]" />
-        
-        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 relative z-10 text-center">
-          <h2 className="text-3xl md:text-5xl font-heading font-bold mb-16">Don't just take our word for it.</h2>
-          <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
-            <TestimonialCard 
-              name="Sarah J." 
-              role="Senior Product Manager" 
-              text="The AI recruiter feedback was spot on. It highlighted gaps in my resume I never would have noticed. Landed 3 interviews the following week."
-            />
-            <TestimonialCard 
-              name="David M." 
-              role="Software Engineer" 
-              text="The ATS scoring saved me hours of tweaking my resume for every application. The tailored keyword suggestions are a game changer."
-            />
-            <TestimonialCard 
-              name="Emily R." 
-              role="Marketing Director" 
-              text="I used the interview prep module before my final round at a FAANG company. The questions it generated were shockingly similar to the real ones."
-            />
-          </div>
-        </div>
-      </section>
+
 
       {/* --- APP SECTION --- */}
       <section id="app-section" className="py-32 px-4 sm:px-6 lg:px-8">
@@ -328,26 +291,4 @@ function FeatureShowcase({ title, subtitle, description, icon, imageContent, rev
   );
 }
 
-function TestimonialCard({ name, role, text }: { name: string, role: string, text: string }) {
-  return (
-    <div className="bg-zinc-800/50 dark:bg-zinc-900/50 border border-zinc-700 dark:border-zinc-800 p-8 rounded-2xl text-left hover:-translate-y-2 transition-transform duration-300">
-      <div className="flex gap-1 text-amber-400 mb-6">
-        <Star size={18} fill="currentColor" />
-        <Star size={18} fill="currentColor" />
-        <Star size={18} fill="currentColor" />
-        <Star size={18} fill="currentColor" />
-        <Star size={18} fill="currentColor" />
-      </div>
-      <p className="text-zinc-300 text-lg leading-relaxed mb-8">"{text}"</p>
-      <div className="flex items-center gap-4">
-        <div className="w-12 h-12 bg-zinc-700 rounded-full flex items-center justify-center font-bold text-white">
-          {name.charAt(0)}
-        </div>
-        <div>
-          <p className="font-bold text-white">{name}</p>
-          <p className="text-sm text-zinc-400">{role}</p>
-        </div>
-      </div>
-    </div>
-  );
-}
+
