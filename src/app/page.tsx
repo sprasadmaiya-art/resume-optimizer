@@ -3,8 +3,8 @@
 import { useState, useEffect } from "react";
 import { motion } from "framer-motion";
 import { useTheme } from "next-themes";
-import OptimizerForm from "@/components/OptimizerForm";
-import ResultsDisplay from "@/components/ResultsDisplay";
+import { SignInButton, UserButton, useAuth } from "@clerk/nextjs";
+import Link from "next/link";
 import { 
   Sparkles, 
   FileText, 
@@ -15,10 +15,8 @@ import {
   Moon,
   Sun,
   ChevronRight,
-  CheckCircle2,
-  Star
+  CheckCircle2
 } from "lucide-react";
-import { usePostHog } from 'posthog-js/react';
 
 // --- Theme Toggle Component ---
 function ThemeToggle() {
@@ -32,7 +30,7 @@ function ThemeToggle() {
   return (
     <button
       onClick={() => setTheme(theme === "dark" ? "light" : "dark")}
-      className="fixed top-4 right-4 z-50 p-2 rounded-full glass-card text-zinc-600 dark:text-zinc-300 hover:text-teal-500 transition-colors"
+      className="p-2 rounded-full hover:bg-zinc-100 dark:hover:bg-zinc-800 text-zinc-600 dark:text-zinc-300 transition-colors"
       aria-label="Toggle theme"
     >
       {theme === "dark" ? <Sun size={20} /> : <Moon size={20} />}
@@ -40,60 +38,46 @@ function ThemeToggle() {
   );
 }
 
+// --- Navbar ---
+function Navbar() {
+  const { isSignedIn, isLoaded } = useAuth();
+
+  return (
+    <nav className="fixed top-0 w-full z-50 glass border-b border-zinc-200/50 dark:border-zinc-800/50">
+      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 h-16 flex items-center justify-between">
+        <div className="flex items-center gap-2 font-heading font-bold text-xl text-zinc-900 dark:text-white">
+          <Sparkles className="w-5 h-5 text-teal-500" />
+          <span>Career AI</span>
+        </div>
+        <div className="flex items-center gap-4">
+          <ThemeToggle />
+          {isLoaded && !isSignedIn && (
+            <SignInButton mode="modal">
+              <button className="px-4 py-2 rounded-full bg-zinc-900 dark:bg-white text-white dark:text-zinc-900 text-sm font-medium hover:scale-105 transition-transform">
+                Sign In
+              </button>
+            </SignInButton>
+          )}
+          {isLoaded && isSignedIn && (
+            <>
+              <Link href="/dashboard" className="px-4 py-2 rounded-full text-sm font-medium hover:bg-zinc-100 dark:hover:bg-zinc-800 transition-colors">
+                Dashboard
+              </Link>
+              <UserButton />
+            </>
+          )}
+        </div>
+      </div>
+    </nav>
+  );
+}
+
 export default function Home() {
-  const [isLoading, setIsLoading] = useState(false);
-  const [results, setResults] = useState(null);
-  const [error, setError] = useState<string | null>(null);
-  const posthog = usePostHog();
-
-  const handleOptimize = async (resume: string, jobDescription: string, role: string, skills: string[]) => {
-    posthog.capture('optimize_clicked', { target_role: role });
-    if (jobDescription) {
-      posthog.capture('job_description_added', { target_role: role });
-    }
-    
-    setIsLoading(true);
-    setError(null);
-    try {
-      const response = await fetch("/api/optimize", {
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ resume, jobDescription, role, skills }),
-      });
-
-      if (!response.ok) {
-        throw new Error("Failed to generate ATS match analysis. Please try again.");
-      }
-
-      const data = await response.json();
-      setResults(data);
-      
-      posthog.capture('job_match_generated', { target_role: role });
-      posthog.capture('recruiter_analysis_generated');
-      posthog.capture('interview_prep_generated');
-      posthog.capture('career_recommendations_generated');
-      
-      if (data.match?.atsScore) {
-        posthog.capture('ats_score_generated', { 
-          score: data.match.atsScore, 
-          category: data.match.atsScoreCategory,
-          target_role: role
-        });
-      }
-    } catch (err: any) {
-      setError(err.message || "An unexpected error occurred.");
-    } finally {
-      setIsLoading(false);
-    }
-  };
-
-  const scrollToApp = () => {
-    document.getElementById("app-section")?.scrollIntoView({ behavior: "smooth" });
-  };
+  const { isSignedIn, isLoaded } = useAuth();
 
   return (
     <div className="relative w-full overflow-x-hidden">
-      <ThemeToggle />
+      <Navbar />
 
       {/* --- HERO SECTION --- */}
       <section className="relative pt-32 pb-20 px-4 sm:px-6 lg:px-8 max-w-7xl mx-auto flex flex-col items-center text-center min-h-[90vh] justify-center">
@@ -132,12 +116,18 @@ export default function Home() {
           transition={{ duration: 0.5, delay: 0.3 }}
           className="mt-10 flex flex-col sm:flex-row gap-4 items-center justify-center"
         >
-          <button 
-            onClick={scrollToApp}
-            className="px-8 py-4 rounded-full bg-zinc-900 dark:bg-zinc-100 text-white dark:text-zinc-900 font-semibold text-lg hover:scale-105 transition-transform flex items-center gap-2 shadow-xl shadow-zinc-900/20 dark:shadow-white/10"
-          >
-            Start Optimizing Free <ChevronRight size={20} />
-          </button>
+          {isLoaded && !isSignedIn && (
+            <SignInButton mode="modal">
+              <button className="px-8 py-4 rounded-full bg-zinc-900 dark:bg-zinc-100 text-white dark:text-zinc-900 font-semibold text-lg hover:scale-105 transition-transform flex items-center gap-2 shadow-xl shadow-zinc-900/20 dark:shadow-white/10">
+                Start Optimizing Free <ChevronRight size={20} />
+              </button>
+            </SignInButton>
+          )}
+          {isLoaded && isSignedIn && (
+            <Link href="/dashboard" className="px-8 py-4 rounded-full bg-zinc-900 dark:bg-zinc-100 text-white dark:text-zinc-900 font-semibold text-lg hover:scale-105 transition-transform flex items-center gap-2 shadow-xl shadow-zinc-900/20 dark:shadow-white/10">
+              Go to Dashboard <ChevronRight size={20} />
+            </Link>
+          )}
           <button 
             onClick={() => document.getElementById("features")?.scrollIntoView({ behavior: "smooth" })}
             className="px-8 py-4 rounded-full glass-card font-semibold text-lg hover:bg-zinc-50 dark:hover:bg-zinc-800 transition-colors"
@@ -169,8 +159,6 @@ export default function Home() {
           </div>
         </motion.div>
       </section>
-
-
 
       {/* --- FEATURES SHOWCASE --- */}
       <section id="features" className="py-24 px-4 sm:px-6 lg:px-8 max-w-7xl mx-auto space-y-32">
@@ -217,38 +205,23 @@ export default function Home() {
         />
       </section>
 
-
-
-      {/* --- APP SECTION --- */}
-      <section id="app-section" className="py-32 px-4 sm:px-6 lg:px-8">
-        <div className="max-w-6xl mx-auto">
-          <div className="text-center mb-16">
-            <h2 className="text-4xl md:text-5xl font-heading font-bold mb-4">Ready to elevate your career?</h2>
-            <p className="text-xl text-zinc-600 dark:text-zinc-400">Try the platform below. No credit card required.</p>
-          </div>
-
-          <div className="glass dark:bg-zinc-900/80 rounded-3xl p-6 md:p-12 shadow-2xl border border-zinc-200/50 dark:border-zinc-700 relative overflow-hidden">
-             {/* Glow effect behind the form */}
-             <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-3/4 h-3/4 bg-teal-400/10 dark:bg-teal-500/10 rounded-full blur-[120px] pointer-events-none" />
-             
-             <div className="relative z-10">
-                <OptimizerForm onSubmit={handleOptimize} isLoading={isLoading} />
-                
-                {error && (
-                  <motion.div
-                    initial={{ opacity: 0 }}
-                    animate={{ opacity: 1 }}
-                    className="mt-8 w-full p-4 bg-red-50 dark:bg-red-900/20 border border-red-200 dark:border-red-500/30 rounded-xl text-red-600 dark:text-red-400 text-center shadow-sm flex items-center justify-center gap-2"
-                  >
-                    <span>{error}</span>
-                  </motion.div>
-                )}
-
-                <div className="mt-12">
-                  <ResultsDisplay results={results} />
-                </div>
-             </div>
-          </div>
+      {/* --- CTA SECTION --- */}
+      <section className="py-32 px-4 sm:px-6 lg:px-8 bg-zinc-900 dark:bg-black text-white text-center">
+        <div className="max-w-4xl mx-auto">
+          <h2 className="text-4xl md:text-5xl font-heading font-bold mb-6">Ready to elevate your career?</h2>
+          <p className="text-xl text-zinc-400 mb-10">Join thousands of professionals landing their dream roles with AI.</p>
+          {isLoaded && !isSignedIn && (
+            <SignInButton mode="modal">
+              <button className="px-8 py-4 rounded-full bg-white text-zinc-900 font-bold text-lg hover:scale-105 transition-transform shadow-xl">
+                Get Started for Free
+              </button>
+            </SignInButton>
+          )}
+          {isLoaded && isSignedIn && (
+            <Link href="/dashboard" className="px-8 py-4 rounded-full bg-white text-zinc-900 font-bold text-lg hover:scale-105 transition-transform shadow-xl inline-block">
+              Open Dashboard
+            </Link>
+          )}
         </div>
       </section>
 
@@ -259,8 +232,6 @@ export default function Home() {
     </div>
   );
 }
-
-// --- SUBCOMPONENTS ---
 
 function FeatureShowcase({ title, subtitle, description, icon, imageContent, reverse = false }: any) {
   return (
@@ -290,5 +261,3 @@ function FeatureShowcase({ title, subtitle, description, icon, imageContent, rev
     </motion.div>
   );
 }
-
-

@@ -1,0 +1,88 @@
+import { currentUser, auth } from "@clerk/nextjs/server";
+import { prisma } from "@/lib/prisma";
+import Link from "next/link";
+import { ArrowRight, FileText, Target, Users } from "lucide-react";
+
+export default async function DashboardOverview() {
+  const user = await currentUser();
+  const { userId } = await auth();
+
+  let totalOptimizations = 0;
+  let avgAtsScore = 0;
+
+  if (userId) {
+    const sessions = await prisma.optimizationSession.findMany({
+      where: { userId },
+      select: { atsScore: true },
+    });
+
+    totalOptimizations = sessions.length;
+    const scoredSessions = sessions.filter(s => s.atsScore !== null);
+    if (scoredSessions.length > 0) {
+      const totalScore = scoredSessions.reduce((acc, curr) => acc + (curr.atsScore || 0), 0);
+      avgAtsScore = Math.round(totalScore / scoredSessions.length);
+    }
+  }
+
+  return (
+    <div className="space-y-8">
+      <div>
+        <h1 className="text-3xl font-heading font-bold text-zinc-900 dark:text-white">
+          Welcome back, {user?.firstName || "Professional"}
+        </h1>
+        <p className="text-zinc-600 dark:text-zinc-400 mt-2">
+          Here's an overview of your career intelligence data.
+        </p>
+      </div>
+
+      <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
+        <div className="glass-card p-6 border border-zinc-200 dark:border-zinc-800">
+          <div className="flex items-center justify-between mb-4">
+            <h3 className="font-semibold text-zinc-800 dark:text-zinc-200">Resumes Optimized</h3>
+            <div className="w-10 h-10 rounded-full bg-indigo-50 dark:bg-indigo-500/10 flex items-center justify-center text-indigo-500">
+              <FileText className="w-5 h-5" />
+            </div>
+          </div>
+          <p className="text-3xl font-bold text-zinc-900 dark:text-white">{totalOptimizations}</p>
+          <Link href="/dashboard/history" className="text-sm text-indigo-500 hover:underline mt-4 inline-block">
+            View history &rarr;
+          </Link>
+        </div>
+
+        <div className="glass-card p-6 border border-zinc-200 dark:border-zinc-800">
+          <div className="flex items-center justify-between mb-4">
+            <h3 className="font-semibold text-zinc-800 dark:text-zinc-200">Average ATS Score</h3>
+            <div className="w-10 h-10 rounded-full bg-teal-50 dark:bg-teal-500/10 flex items-center justify-center text-teal-500">
+              <Target className="w-5 h-5" />
+            </div>
+          </div>
+          <p className="text-3xl font-bold text-zinc-900 dark:text-white">{avgAtsScore > 0 ? avgAtsScore : "-"}</p>
+          <p className="text-sm text-zinc-500 dark:text-zinc-400 mt-4">Across all your applications</p>
+        </div>
+
+        <div className="glass-card p-6 border border-zinc-200 dark:border-zinc-800">
+          <div className="flex items-center justify-between mb-4">
+            <h3 className="font-semibold text-zinc-800 dark:text-zinc-200">Interviews Prepped</h3>
+            <div className="w-10 h-10 rounded-full bg-amber-50 dark:bg-amber-500/10 flex items-center justify-center text-amber-500">
+              <Users className="w-5 h-5" />
+            </div>
+          </div>
+          <p className="text-3xl font-bold text-zinc-900 dark:text-white">{totalOptimizations}</p>
+          <p className="text-sm text-zinc-500 dark:text-zinc-400 mt-4">From optimization runs</p>
+        </div>
+      </div>
+
+      <div className="mt-8">
+        <div className="glass-card p-8 border border-zinc-200 dark:border-zinc-800 text-center">
+          <h2 className="text-2xl font-bold mb-4 text-zinc-900 dark:text-white">Ready for your next application?</h2>
+          <p className="text-zinc-600 dark:text-zinc-400 mb-8 max-w-xl mx-auto">
+            Upload your resume and a target job description to get instant ATS feedback and a highly optimized resume.
+          </p>
+          <Link href="/dashboard/optimize" className="inline-flex items-center gap-2 px-6 py-3 rounded-xl bg-teal-600 text-white font-medium hover:bg-teal-700 transition-colors shadow-lg shadow-teal-500/20">
+            Start New Optimization <ArrowRight className="w-4 h-4" />
+          </Link>
+        </div>
+      </div>
+    </div>
+  );
+}

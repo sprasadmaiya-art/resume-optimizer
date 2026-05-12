@@ -1,5 +1,7 @@
 import { NextResponse } from "next/server";
 import { GoogleGenAI } from "@google/genai";
+import { auth } from "@clerk/nextjs/server";
+import { prisma } from "@/lib/prisma";
 
 // Allow longer execution time for the massive prompt (Vercel specific)
 export const maxDuration = 60;
@@ -8,6 +10,7 @@ const ai = new GoogleGenAI({ apiKey: process.env.GEMINI_API_KEY });
 
 export async function POST(req: Request) {
   try {
+    const { userId } = await auth();
     const { resume, jobDescription, role, skills } = await req.json();
 
     if (!resume || !jobDescription || !role) {
@@ -109,6 +112,25 @@ Provide a harsh but constructive, deeply insightful analysis. Provide the raw JS
     } catch (parseError) {
       console.error("Failed to parse JSON response:", text);
       throw new Error("The AI returned an invalid response format.");
+    }
+
+    if (userId) {
+      try {
+        await prisma.optimizationSession.create({
+          data: {
+            userId,
+            role,
+            originalResume: resume,
+            jobDescription,
+            skills: skills || [],
+            atsScore: parsedData.match?.atsScore || null,
+            results: parsedData,
+          }
+        });
+      } catch (dbError) {
+        console.error("Failed to save optimization session to DB:", dbError);
+        // Continue and return the results anyway so user is not blocked
+      }
     }
 
     return NextResponse.json(parsedData);

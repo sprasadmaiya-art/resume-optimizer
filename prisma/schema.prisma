@@ -1,0 +1,25 @@
+// This is your Prisma schema file,
+// learn more about it in the docs: https://pris.ly/d/prisma-schema
+
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider  = "postgresql"
+}
+
+model OptimizationSession {
+  id             String   @id @default(uuid())
+  userId         String   // Clerk User ID
+  role           String
+  originalResume String
+  jobDescription String
+  skills         String[] // Array of strings
+  atsScore       Int?
+  results        Json?    // Storing the full AI payload for history rendering
+  createdAt      DateTime @default(now())
+  updatedAt      DateTime @updatedAt
+
+  @@index([userId])
+}
