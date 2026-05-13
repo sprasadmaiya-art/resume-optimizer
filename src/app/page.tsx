@@ -3,7 +3,7 @@
 import { useState, useEffect } from "react";
 import { motion } from "framer-motion";
 import { useTheme } from "next-themes";
-import { SignInButton, UserButton, useAuth } from "@clerk/nextjs";
+import { SignInButton, SignUpButton, UserButton, Show } from "@clerk/nextjs";
 import Link from "next/link";
 import { 
   Sparkles, 
@@ -40,8 +40,6 @@ function ThemeToggle() {
 
 // --- Navbar ---
 function Navbar() {
-  const { isSignedIn, isLoaded } = useAuth();
-
   return (
     <nav className="fixed top-0 w-full z-50 glass border-b border-zinc-200/50 dark:border-zinc-800/50">
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 h-16 flex items-center justify-between">
@@ -51,21 +49,24 @@ function Navbar() {
         </div>
         <div className="flex items-center gap-4">
           <ThemeToggle />
-          {isLoaded && !isSignedIn && (
+          <Show when="signed-out">
             <SignInButton mode="modal">
-              <button className="px-4 py-2 rounded-full bg-zinc-900 dark:bg-white text-white dark:text-zinc-900 text-sm font-medium hover:scale-105 transition-transform">
+              <button className="px-4 py-2 text-sm font-medium text-zinc-700 dark:text-zinc-300 hover:text-zinc-900 dark:hover:text-white transition-colors">
                 Sign In
               </button>
             </SignInButton>
-          )}
-          {isLoaded && isSignedIn && (
-            <>
-              <Link href="/dashboard" className="px-4 py-2 rounded-full text-sm font-medium hover:bg-zinc-100 dark:hover:bg-zinc-800 transition-colors">
-                Dashboard
-              </Link>
-              <UserButton />
-            </>
-          )}
+            <SignUpButton mode="modal">
+              <button className="px-4 py-2 rounded-full bg-zinc-900 dark:bg-white text-white dark:text-zinc-900 text-sm font-medium hover:scale-105 transition-transform">
+                Sign Up
+              </button>
+            </SignUpButton>
+          </Show>
+          <Show when="signed-in">
+            <Link href="/dashboard" className="px-4 py-2 rounded-full text-sm font-medium hover:bg-zinc-100 dark:hover:bg-zinc-800 transition-colors">
+              Dashboard
+            </Link>
+            <UserButton />
+          </Show>
         </div>
       </div>
     </nav>
@@ -73,7 +74,6 @@ function Navbar() {
 }
 
 export default function Home() {
-  const { isSignedIn, isLoaded } = useAuth();
 
   return (
     <div className="relative w-full overflow-x-hidden">
@@ -116,18 +116,18 @@ export default function Home() {
           transition={{ duration: 0.5, delay: 0.3 }}
           className="mt-10 flex flex-col sm:flex-row gap-4 items-center justify-center"
         >
-          {isLoaded && !isSignedIn && (
-            <SignInButton mode="modal">
+          <Show when="signed-out">
+            <SignUpButton mode="modal">
               <button className="px-8 py-4 rounded-full bg-zinc-900 dark:bg-zinc-100 text-white dark:text-zinc-900 font-semibold text-lg hover:scale-105 transition-transform flex items-center gap-2 shadow-xl shadow-zinc-900/20 dark:shadow-white/10">
                 Start Optimizing Free <ChevronRight size={20} />
               </button>
-            </SignInButton>
-          )}
-          {isLoaded && isSignedIn && (
+            </SignUpButton>
+          </Show>
+          <Show when="signed-in">
             <Link href="/dashboard" className="px-8 py-4 rounded-full bg-zinc-900 dark:bg-zinc-100 text-white dark:text-zinc-900 font-semibold text-lg hover:scale-105 transition-transform flex items-center gap-2 shadow-xl shadow-zinc-900/20 dark:shadow-white/10">
               Go to Dashboard <ChevronRight size={20} />
             </Link>
-          )}
+          </Show>
           <button 
             onClick={() => document.getElementById("features")?.scrollIntoView({ behavior: "smooth" })}
             className="px-8 py-4 rounded-full glass-card font-semibold text-lg hover:bg-zinc-50 dark:hover:bg-zinc-800 transition-colors"
@@ -210,18 +210,18 @@ export default function Home() {
         <div className="max-w-4xl mx-auto">
           <h2 className="text-4xl md:text-5xl font-heading font-bold mb-6">Ready to elevate your career?</h2>
           <p className="text-xl text-zinc-400 mb-10">Join thousands of professionals landing their dream roles with AI.</p>
-          {isLoaded && !isSignedIn && (
-            <SignInButton mode="modal">
+          <Show when="signed-out">
+            <SignUpButton mode="modal">
               <button className="px-8 py-4 rounded-full bg-white text-zinc-900 font-bold text-lg hover:scale-105 transition-transform shadow-xl">
                 Get Started for Free
               </button>
-            </SignInButton>
-          )}
-          {isLoaded && isSignedIn && (
+            </SignUpButton>
+          </Show>
+          <Show when="signed-in">
             <Link href="/dashboard" className="px-8 py-4 rounded-full bg-white text-zinc-900 font-bold text-lg hover:scale-105 transition-transform shadow-xl inline-block">
               Open Dashboard
             </Link>
-          )}
+          </Show>
         </div>
       </section>
 
