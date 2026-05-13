@@ -17,9 +17,9 @@ export default async function DashboardOverview() {
     });
 
     totalOptimizations = sessions.length;
-    const scoredSessions = sessions.filter(s => s.atsScore !== null);
+    const scoredSessions = sessions.filter((s: any) => s.atsScore !== null);
     if (scoredSessions.length > 0) {
-      const totalScore = scoredSessions.reduce((acc, curr) => acc + (curr.atsScore || 0), 0);
+      const totalScore = scoredSessions.reduce((acc: number, curr: any) => acc + (curr.atsScore || 0), 0);
       avgAtsScore = Math.round(totalScore / scoredSessions.length);
     }
   }
