@@ -39,7 +39,7 @@ export default async function HistoryPage() {
         </div>
       ) : (
         <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-          {sessions.map((session) => (
+          {sessions.map((session: any) => (
             <div key={session.id} className="glass-card p-6 border border-zinc-200 dark:border-zinc-800 hover:border-teal-500/50 transition-colors group relative overflow-hidden">
               <div className="absolute top-0 right-0 p-4 opacity-10 group-hover:opacity-20 transition-opacity">
                 <Target className="w-24 h-24 text-teal-500" />
@@ -54,7 +54,7 @@ export default async function HistoryPage() {
                     {new Date(session.createdAt).toLocaleDateString()}
                   </div>
                 </div>
-                
+
                 <div className="flex items-end gap-2 mb-6">
                   <span className="text-4xl font-black text-zinc-900 dark:text-white">
                     {session.atsScore || "-"}
