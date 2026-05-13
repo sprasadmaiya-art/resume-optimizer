@@ -25,8 +25,8 @@ export default function RootLayout({
   return (
     <ClerkProvider>
       <html lang="en" suppressHydrationWarning>
-        <CSPostHogProvider>
-          <body className={`${inter.variable} ${outfit.variable} font-sans min-h-screen bg-zinc-50 dark:bg-zinc-950 text-zinc-900 dark:text-zinc-50 selection:bg-teal-500/30 transition-colors duration-300`}>
+        <body className={`${inter.variable} ${outfit.variable} font-sans min-h-screen bg-zinc-50 dark:bg-zinc-950 text-zinc-900 dark:text-zinc-50 selection:bg-teal-500/30 transition-colors duration-300`}>
+          <CSPostHogProvider>
             <Suspense fallback={null}>
               <PostHogPageView />
             </Suspense>
@@ -36,8 +36,8 @@ export default function RootLayout({
               <div className="absolute bottom-[-10%] right-[-10%] w-[40%] h-[40%] rounded-full bg-indigo-400/10 blur-[120px] dark:bg-indigo-500/5" />
             </div>
             {children}
-          </body>
-        </CSPostHogProvider>
+          </CSPostHogProvider>
+        </body>
       </html>
     </ClerkProvider>
   );
