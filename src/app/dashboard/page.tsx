@@ -2,6 +2,7 @@ import { currentUser, auth } from "@clerk/nextjs/server";
 import { prisma } from "@/lib/prisma";
 import Link from "next/link";
 import { ArrowRight, FileText, Target, Users } from "lucide-react";
+export const dynamic = "force-dynamic";
 
 export default async function DashboardOverview() {
   const user = await currentUser();
