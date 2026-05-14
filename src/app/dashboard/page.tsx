@@ -5,27 +5,28 @@ import { ArrowRight, FileText, Target, Users } from "lucide-react";
 export const dynamic = "force-dynamic";
 
 export default async function DashboardOverview() {
-  const user = await currentUser();
-  const { userId } = await auth();
+  try {
+    const user = await currentUser();
+    const { userId } = await auth();
 
-  let totalOptimizations = 0;
-  let avgAtsScore = 0;
+    let totalOptimizations = 0;
+    let avgAtsScore = 0;
 
-  if (userId) {
-    const sessions = await prisma.optimizationSession.findMany({
-      where: { userId },
-      select: { atsScore: true },
-    });
+    if (userId) {
+      const sessions = await prisma.optimizationSession.findMany({
+        where: { userId },
+        select: { atsScore: true },
+      });
 
-    totalOptimizations = sessions.length;
-    const scoredSessions = sessions.filter((s: any) => s.atsScore !== null);
-    if (scoredSessions.length > 0) {
-      const totalScore = scoredSessions.reduce((acc: number, curr: any) => acc + (curr.atsScore || 0), 0);
-      avgAtsScore = Math.round(totalScore / scoredSessions.length);
+      totalOptimizations = sessions.length;
+      const scoredSessions = sessions.filter((s: any) => s.atsScore !== null);
+      if (scoredSessions.length > 0) {
+        const totalScore = scoredSessions.reduce((acc: number, curr: any) => acc + (curr.atsScore || 0), 0);
+        avgAtsScore = Math.round(totalScore / scoredSessions.length);
+      }
     }
-  }
 
-  return (
+    return (
     <div className="space-y-8">
       <div>
         <h1 className="text-3xl font-heading font-bold text-zinc-900 dark:text-white">
@@ -85,5 +86,17 @@ export default async function DashboardOverview() {
         </div>
       </div>
     </div>
-  );
+    );
+  } catch (error: any) {
+    return (
+      <div className="p-8 bg-red-50 dark:bg-red-900/20 border border-red-200 dark:border-red-800 rounded-xl max-w-4xl mx-auto mt-12">
+        <h2 className="text-2xl font-bold text-red-600 dark:text-red-400 mb-4">Dashboard Error</h2>
+        <p className="text-zinc-700 dark:text-zinc-300 mb-4">There was an error loading your dashboard data. Please share this exact error message:</p>
+        <div className="bg-white dark:bg-zinc-950 p-4 rounded-lg overflow-x-auto text-sm font-mono text-red-600 dark:text-red-400 border border-red-100 dark:border-red-900/50">
+          <strong>Message:</strong> {error?.message || "Unknown error"}<br/><br/>
+          <strong>Stack:</strong> {error?.stack || "No stack trace"}
+        </div>
+      </div>
+    );
+  }
 }
