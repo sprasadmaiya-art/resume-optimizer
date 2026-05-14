@@ -4,7 +4,11 @@ import { PrismaPg } from "@prisma/adapter-pg";
 
 const prismaClientSingleton = () => {
   const connectionString = process.env.DATABASE_URL || "postgres://dummy:dummy@localhost:5432/dummy";
-  const pool = new Pool({ connectionString });
+  // Next.js Edge / Vercel requires explicit SSL configuration for Supabase and other cloud providers
+  const pool = new Pool({ 
+    connectionString,
+    ssl: process.env.NODE_ENV === "production" ? { rejectUnauthorized: false } : undefined
+  });
   const adapter = new PrismaPg(pool);
   
   return new PrismaClient({ adapter });
