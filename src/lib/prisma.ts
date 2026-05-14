@@ -1,11 +1,13 @@
 import { PrismaClient } from "@prisma/client";
+import { Pool } from "pg";
+import { PrismaPg } from "@prisma/adapter-pg";
 
 const prismaClientSingleton = () => {
-  return new PrismaClient({
-    // In Prisma 7, without an adapter, you must supply an accelerateUrl.
-    // Providing a fallback prevents PrismaClientInitializationError during Next.js static build.
-    accelerateUrl: process.env.DATABASE_URL || "postgres://dummy:dummy@localhost:5432/dummy"
-  });
+  const connectionString = process.env.DATABASE_URL || "postgres://dummy:dummy@localhost:5432/dummy";
+  const pool = new Pool({ connectionString });
+  const adapter = new PrismaPg(pool);
+  
+  return new PrismaClient({ adapter });
 };
 
 declare global {
