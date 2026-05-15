@@ -37,6 +37,10 @@ function fixConnectionString(url: string | undefined) {
 const prismaClientSingleton = () => {
   const connectionString = fixConnectionString(process.env.DATABASE_URL);
   
+  // CRITICAL: Prisma's Rust engine still reads process.env.DATABASE_URL directly for validation
+  // even when using an adapter. We MUST override it so the Rust engine doesn't crash on unencoded '@' symbols.
+  process.env.DATABASE_URL = connectionString;
+  
   // Next.js Edge / Vercel requires explicit SSL configuration for Supabase and other cloud providers
   const pool = new Pool({ 
     connectionString,
