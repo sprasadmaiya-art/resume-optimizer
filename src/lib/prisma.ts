@@ -48,9 +48,10 @@ const prismaClientSingleton = () => {
   });
   const adapter = new PrismaPg(pool);
   
-  // @ts-ignore - Override the datasource URL dynamically to prevent Rust engine crash on special chars
+  // Override the datasource URL dynamically to prevent Rust engine crash on special chars
   return new PrismaClient({ 
     adapter,
+    // @ts-ignore
     datasources: {
       db: {
         url: connectionString
