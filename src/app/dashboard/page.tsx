@@ -88,12 +88,22 @@ export default async function DashboardOverview() {
     </div>
     );
   } catch (error: any) {
+    let debugHost = "unknown";
+    try {
+      const url = process.env.DATABASE_URL || "";
+      const split = url.split('@');
+      if (split.length > 1) {
+        debugHost = split.pop()?.split('/')[0] || "unknown";
+      }
+    } catch (e) {}
+
     return (
       <div className="p-8 bg-red-50 dark:bg-red-900/20 border border-red-200 dark:border-red-800 rounded-xl max-w-4xl mx-auto mt-12">
         <h2 className="text-2xl font-bold text-red-600 dark:text-red-400 mb-4">Dashboard Error</h2>
         <p className="text-zinc-700 dark:text-zinc-300 mb-4">There was an error loading your dashboard data. Please share this exact error message:</p>
         <div className="bg-white dark:bg-zinc-950 p-4 rounded-lg overflow-x-auto text-sm font-mono text-red-600 dark:text-red-400 border border-red-100 dark:border-red-900/50">
           <strong>Message:</strong> {error?.message || "Unknown error"}<br/><br/>
+          <strong>Attempting to connect to host:</strong> {debugHost}<br/><br/>
           <strong>Stack:</strong> {error?.stack || "No stack trace"}
         </div>
       </div>
