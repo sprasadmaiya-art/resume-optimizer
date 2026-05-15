@@ -104,8 +104,8 @@ export default function Home() {
           transition={{ duration: 0.5, delay: 0.1 }}
           className="text-5xl md:text-7xl font-extrabold tracking-tight leading-[1.1] font-heading max-w-4xl"
         >
-          Land Your Dream Role with <br className="hidden md:block" />
-          <span className="bg-clip-text text-transparent bg-gradient-to-r from-indigo-500 via-purple-500 to-teal-400">Data-Driven Precision.</span>
+          Upload your Resume. <br className="hidden md:block" />
+          <span className="bg-clip-text text-transparent bg-gradient-to-r from-indigo-500 via-purple-500 to-teal-400">Get Optimized.</span>
         </motion.h1>
         
         <motion.p
@@ -114,7 +114,7 @@ export default function Home() {
           transition={{ duration: 0.5, delay: 0.2 }}
           className="mt-6 text-lg md:text-xl text-zinc-600 dark:text-zinc-400 max-w-2xl mx-auto leading-relaxed"
         >
-          Stop guessing what recruiters want. Get instant ATS feedback, customized interview prep, and an AI-optimized resume engineered specifically for your target role.
+          Effortlessly match your resume against any job description. Get an instant ATS Score, AI-tailored rewrites, and interview preparation in seconds.
         </motion.p>
 
         <motion.div 
@@ -131,8 +131,8 @@ export default function Home() {
             </SignUpButton>
           </Show>
           <Show when="signed-in">
-            <Link href="/dashboard" className="px-8 py-4 rounded-full bg-zinc-900 dark:bg-white text-white dark:text-zinc-900 font-semibold text-lg hover:scale-105 transition-all flex items-center gap-2 shadow-xl shadow-zinc-900/20 dark:shadow-white/10 hover:shadow-2xl">
-              Go to Dashboard <ChevronRight size={20} />
+            <Link href="/dashboard/optimize" className="px-8 py-4 rounded-full bg-zinc-900 dark:bg-white text-white dark:text-zinc-900 font-semibold text-lg hover:scale-105 transition-all flex items-center gap-2 shadow-xl shadow-zinc-900/20 dark:shadow-white/10 hover:shadow-2xl">
+              Get Optimized <ChevronRight size={20} />
             </Link>
           </Show>
           <button 
@@ -401,17 +401,17 @@ export default function Home() {
                    </svg>
 
                    {/* Branch Nodes */}
-                   <div className="absolute top-[20%] left-[120px] transform -translate-y-1/2 glass-card px-4 py-2 border border-amber-200 dark:border-amber-900/50 rounded-lg shadow-sm">
+                   <div className="absolute top-[20%] left-[100px] transform -translate-y-1/2 glass-card px-4 py-2 border border-amber-200 dark:border-amber-900/50 rounded-lg shadow-sm whitespace-nowrap">
                       <p className="text-xs font-bold text-zinc-900 dark:text-white">Product Manager</p>
                       <p className="text-[10px] text-amber-600 dark:text-amber-400">85% Skill Match</p>
                    </div>
                    
-                   <div className="absolute top-[50%] left-[120px] transform -translate-y-1/2 glass-card px-4 py-2 border border-teal-200 dark:border-teal-900/50 rounded-lg shadow-md ring-2 ring-teal-500/20">
+                   <div className="absolute top-[50%] left-[100px] transform -translate-y-1/2 glass-card px-4 py-2 border border-teal-200 dark:border-teal-900/50 rounded-lg shadow-md ring-2 ring-teal-500/20 whitespace-nowrap z-10">
                       <p className="text-xs font-bold text-zinc-900 dark:text-white">Sr. Software Engineer</p>
                       <p className="text-[10px] text-teal-600 dark:text-teal-400">98% Skill Match</p>
                    </div>
                    
-                   <div className="absolute top-[80%] left-[120px] transform -translate-y-1/2 glass-card px-4 py-2 border border-zinc-200 dark:border-zinc-800 rounded-lg shadow-sm opacity-60">
+                   <div className="absolute top-[80%] left-[100px] transform -translate-y-1/2 glass-card px-4 py-2 border border-zinc-200 dark:border-zinc-800 rounded-lg shadow-sm opacity-60 whitespace-nowrap">
                       <p className="text-xs font-bold text-zinc-900 dark:text-white">Solutions Architect</p>
                       <p className="text-[10px] text-zinc-500">72% Skill Match</p>
                    </div>
@@ -437,8 +437,8 @@ export default function Home() {
             </SignUpButton>
           </Show>
           <Show when="signed-in">
-            <Link href="/dashboard" className="px-8 py-4 rounded-full bg-teal-500 text-white font-bold text-lg hover:scale-105 transition-all shadow-2xl shadow-teal-500/20 inline-block">
-              Open Dashboard
+            <Link href="/dashboard/optimize" className="px-8 py-4 rounded-full bg-teal-500 text-white font-bold text-lg hover:scale-105 transition-all shadow-2xl shadow-teal-500/20 inline-block">
+              Start Optimizing
             </Link>
           </Show>
         </div>

@@ -28,7 +28,8 @@ export default function OptimizePage() {
       });
 
       if (!response.ok) {
-        throw new Error("Failed to generate ATS match analysis. Please try again.");
+        const errData = await response.json().catch(() => null);
+        throw new Error(errData?.error || "Failed to generate ATS match analysis. Please try again.");
       }
 
       const data = await response.json();
