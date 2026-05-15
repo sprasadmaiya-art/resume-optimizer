@@ -19,17 +19,9 @@ export default function DashboardLayout({
         </div>
         
         <div className="p-4 flex flex-col gap-2">
-          <Link href="/dashboard" className="flex items-center gap-3 px-4 py-3 rounded-xl text-sm font-medium text-zinc-600 dark:text-zinc-400 hover:bg-zinc-100 dark:hover:bg-zinc-800 hover:text-zinc-900 dark:hover:text-zinc-100 transition-colors">
-            <LayoutDashboard className="w-4 h-4" />
-            Overview
-          </Link>
           <Link href="/dashboard/optimize" className="flex items-center gap-3 px-4 py-3 rounded-xl text-sm font-medium bg-teal-50 dark:bg-teal-500/10 text-teal-700 dark:text-teal-400 hover:bg-teal-100 dark:hover:bg-teal-500/20 transition-colors">
             <Plus className="w-4 h-4" />
             New Optimization
-          </Link>
-          <Link href="/dashboard/history" className="flex items-center gap-3 px-4 py-3 rounded-xl text-sm font-medium text-zinc-600 dark:text-zinc-400 hover:bg-zinc-100 dark:hover:bg-zinc-800 hover:text-zinc-900 dark:hover:text-zinc-100 transition-colors">
-            <History className="w-4 h-4" />
-            History
           </Link>
         </div>
       </aside>
