@@ -91,15 +91,15 @@ export default function CareerRecommendations({ data }: CareerRecommendationsPro
             </div>
           </div>
 
-          <div className="glass-card p-6 bg-zinc-900 text-white">
-            <h3 className="font-semibold text-lg flex items-center gap-2 mb-4">
-              <Award className="w-5 h-5 text-yellow-400" />
+          <div className="glass-card p-6 border-t-4 border-t-yellow-400">
+            <h3 className="font-semibold text-lg text-zinc-800 flex items-center gap-2 mb-4">
+              <Award className="w-5 h-5 text-yellow-500" />
               Recommended Certifications
             </h3>
             <ul className="space-y-3">
               {data.recommendedCertifications.map((cert, idx) => (
-                <li key={idx} className="flex gap-3 text-sm text-zinc-300 items-start">
-                  <span className="text-yellow-400 mt-0.5 shrink-0">✦</span>
+                <li key={idx} className="flex gap-3 text-sm text-zinc-700 items-start">
+                  <span className="text-yellow-500 mt-0.5 shrink-0">✦</span>
                   <span className="leading-relaxed font-medium">{cert}</span>
                 </li>
               ))}

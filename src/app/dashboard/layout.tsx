@@ -13,7 +13,7 @@ export default function DashboardLayout({
       <header className="h-16 border-b border-zinc-200 dark:border-zinc-800 bg-white/50 dark:bg-zinc-900/50 backdrop-blur-md flex items-center justify-between px-6 flex-shrink-0 z-50 sticky top-0">
         <Link href="/" className="flex items-center gap-2 font-heading font-bold text-xl text-zinc-900 dark:text-white hover:opacity-80 transition-opacity">
           <Sparkles className="w-5 h-5 text-teal-500" />
-          <span>Career AI</span>
+          <span>CareerOS</span>
         </Link>
         <UserButton />
       </header>

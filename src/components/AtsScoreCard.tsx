@@ -183,18 +183,18 @@ export default function AtsScoreCard({ match }: AtsScoreCardProps) {
       </div>
 
       {/* Recommended Improvements */}
-      <div className="glass-card p-6 bg-zinc-900 text-white">
-        <h3 className="font-semibold text-lg flex items-center gap-2 mb-4">
-          <Zap className="w-5 h-5 text-yellow-400" />
+      <div className="glass-card p-6 border-t-4 border-t-yellow-400">
+        <h3 className="font-semibold text-lg text-zinc-800 flex items-center gap-2 mb-4">
+          <Zap className="w-5 h-5 text-yellow-500" />
           Recommended Improvements
         </h3>
         <ul className="space-y-3">
           {match.recommendedImprovements.map((imp, idx) => (
-            <li key={idx} className="flex gap-3 text-sm text-zinc-300 items-start">
-              <div className="w-5 h-5 rounded-full bg-yellow-400/20 text-yellow-400 flex items-center justify-center text-xs font-bold shrink-0">
+            <li key={idx} className="flex gap-3 text-sm text-zinc-700 items-start">
+              <div className="w-5 h-5 rounded-full bg-yellow-100 text-yellow-600 flex items-center justify-center text-xs font-bold shrink-0 mt-0.5">
                 {idx + 1}
               </div>
-              <span className="leading-relaxed mt-0.5">{imp}</span>
+              <span className="leading-relaxed font-medium">{imp}</span>
             </li>
           ))}
         </ul>
