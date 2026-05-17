@@ -152,7 +152,7 @@ export default function OptimizerForm({ onSubmit, isLoading }: OptimizerFormProp
               <Sparkles className="w-5 h-5 text-white" />
             )}
             <span className="font-bold text-white text-lg tracking-wide">
-              {isLoading ? "Generating ATS Match Analysis..." : "Analyze ATS Match"}
+              {isLoading ? "Generating Career Intelligence Report..." : "Generate Full Analysis"}
             </span>
           </div>
         </button>

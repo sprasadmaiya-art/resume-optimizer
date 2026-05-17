@@ -122,24 +122,22 @@ export default function ResultsDisplay({ results }: ResultsDisplayProps) {
       </div>
 
       {/* Navigation Tabs */}
-      <div className="flex overflow-x-auto hide-scrollbar pb-2">
-        <div className="flex space-x-2 p-1.5 bg-zinc-100/80 dark:bg-zinc-800/80 rounded-2xl w-max border border-zinc-200/50 dark:border-zinc-700/50 shadow-inner">
+      <div className="flex flex-wrap gap-3 pb-4">
           {tabs.map((tab) => (
             <button
               key={tab.id}
               onClick={() => handleTabChange(tab.id)}
               className={cn(
-                "flex items-center gap-2 px-5 py-2.5 text-sm font-medium rounded-xl transition-all whitespace-nowrap",
+                "flex items-center gap-2 px-6 py-3 text-sm font-bold rounded-xl transition-all whitespace-nowrap border-2 shadow-sm",
                 activeTab === tab.id 
-                  ? "bg-white dark:bg-zinc-900 text-teal-600 dark:text-teal-400 shadow-sm ring-1 ring-zinc-200 dark:ring-zinc-800" 
-                  : "text-zinc-600 dark:text-zinc-400 hover:text-zinc-900 dark:hover:text-zinc-100 hover:bg-zinc-200/50 dark:hover:bg-zinc-700/50"
+                  ? "bg-teal-50 dark:bg-teal-500/10 border-teal-500 text-teal-700 dark:text-teal-400 shadow-teal-500/20 shadow-md transform scale-[1.02]" 
+                  : "bg-white dark:bg-zinc-900 border-zinc-200 dark:border-zinc-800 text-zinc-600 dark:text-zinc-400 hover:border-teal-300 dark:hover:border-teal-700 hover:text-zinc-900 dark:hover:text-zinc-100 hover:shadow-md"
               )}
             >
               {tab.icon}
               {tab.label}
             </button>
           ))}
-        </div>
       </div>
 
       {/* Tab Content */}

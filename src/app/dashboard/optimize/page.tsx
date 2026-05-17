@@ -29,7 +29,7 @@ export default function OptimizePage() {
 
       if (!response.ok) {
         const errData = await response.json().catch(() => null);
-        throw new Error(errData?.error || "Failed to generate ATS match analysis. Please try again.");
+        throw new Error(errData?.error || "Failed to generate Career Intelligence Report. Please try again.");
       }
 
       const data = await response.json();
