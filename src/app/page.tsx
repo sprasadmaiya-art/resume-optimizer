@@ -114,7 +114,7 @@ export default function Home() {
           transition={{ duration: 0.5, delay: 0.2 }}
           className="mt-6 text-lg md:text-xl text-zinc-600 dark:text-zinc-400 max-w-2xl mx-auto leading-relaxed"
         >
-          Effortlessly match your resume against any job description. Get an instant ATS Score, AI-tailored rewrites, and interview preparation in seconds.
+          Practice your interview with the AI recruiter that just analyzed your resume against the job description. Get an instant ATS Score and tailored feedback.
         </motion.p>
 
         <motion.div 
