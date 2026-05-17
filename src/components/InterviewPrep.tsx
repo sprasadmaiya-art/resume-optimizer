@@ -138,11 +138,11 @@ export default function InterviewPrep({ data }: InterviewPrepProps) {
         initial={{ opacity: 0, y: 20 }}
         whileInView={{ opacity: 1, y: 0 }}
         viewport={{ once: true }}
-        className="glass-card p-8 bg-zinc-900 dark:bg-black text-white rounded-3xl relative overflow-hidden"
+        className="p-8 bg-zinc-900 border border-zinc-800 text-white rounded-3xl relative overflow-hidden shadow-xl"
       >
         <div className="absolute inset-0 bg-[radial-gradient(ellipse_at_top_right,_var(--tw-gradient-stops))] from-yellow-900/40 via-transparent to-transparent"></div>
         <h3 className="font-bold text-xl flex items-center gap-3 mb-8 relative z-10">
-          <div className="p-2 bg-yellow-500/20 rounded-xl">
+          <div className="p-2 bg-yellow-500/20 rounded-xl border border-yellow-500/30">
              <Sparkles className="w-6 h-6 text-yellow-400" />
           </div>
           Strategy & Confidence Tips
@@ -157,7 +157,7 @@ export default function InterviewPrep({ data }: InterviewPrepProps) {
               transition={{ delay: idx * 0.1 }}
               className="flex gap-4 p-4 rounded-2xl bg-white/5 border border-white/10 hover:bg-white/10 transition-colors"
             >
-              <div className="w-8 h-8 rounded-full bg-yellow-500/20 text-yellow-400 flex items-center justify-center shrink-0 font-bold border border-yellow-500/30">
+              <div className="w-8 h-8 rounded-full bg-yellow-500/20 text-yellow-400 flex items-center justify-center shrink-0 font-bold border border-yellow-500/30 shadow-sm shadow-yellow-500/10">
                 {idx + 1}
               </div>
               <span className="leading-relaxed text-zinc-300 text-sm mt-1">{tip}</span>
@@ -219,16 +219,16 @@ function FlashcardDeck({ title, questions, icon, color }: { title: string; quest
       <div className="p-4 border-t border-zinc-100 dark:border-zinc-800 flex justify-between items-center bg-zinc-50 dark:bg-zinc-900/80">
         <button 
           onClick={prevCard}
-          className="p-2 rounded-full hover:bg-zinc-200 dark:hover:bg-zinc-800 text-zinc-600 dark:text-zinc-400 transition-colors"
+          className="flex items-center gap-1 px-4 py-2 rounded-xl bg-zinc-200 dark:bg-zinc-800 hover:bg-zinc-300 dark:hover:bg-zinc-700 text-zinc-700 dark:text-zinc-300 transition-colors shadow-sm font-semibold text-sm"
         >
-          <ChevronLeft className="w-5 h-5" />
+          <ChevronLeft className="w-4 h-4" /> Prev
         </button>
-        <p className="text-xs text-zinc-400 uppercase tracking-widest font-semibold">Flashcard Practice</p>
+        <p className="text-xs text-zinc-500 uppercase tracking-widest font-bold">More Cards</p>
         <button 
           onClick={nextCard}
-          className="p-2 rounded-full hover:bg-zinc-200 dark:hover:bg-zinc-800 text-zinc-600 dark:text-zinc-400 transition-colors"
+          className="flex items-center gap-1 px-4 py-2 rounded-xl bg-zinc-900 dark:bg-zinc-100 hover:bg-zinc-800 dark:hover:bg-zinc-200 text-white dark:text-zinc-900 transition-colors shadow-sm font-semibold text-sm"
         >
-          <ChevronRight className="w-5 h-5" />
+          Next <ChevronRight className="w-4 h-4" />
         </button>
       </div>
     </div>
