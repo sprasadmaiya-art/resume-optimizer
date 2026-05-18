@@ -49,21 +49,28 @@ export default function ResultsDisplay({ results }: ResultsDisplayProps) {
         </div>
       </div>
 
-      {/* Navigation Tabs */}
-      <div className="flex flex-wrap gap-3 pb-4">
+      {/* Navigation Tabs - High Visibility */}
+      <div className="flex flex-wrap justify-center gap-4 pb-8 mb-4 border-b border-zinc-200/50 dark:border-zinc-800/50">
           {tabs.map((tab) => (
             <button
               key={tab.id}
               onClick={() => handleTabChange(tab.id)}
               className={cn(
-                "flex items-center gap-2 px-6 py-3 text-sm font-bold rounded-xl transition-all whitespace-nowrap border-2 shadow-sm",
+                "group flex items-center gap-3 px-8 py-4 text-base font-extrabold rounded-2xl transition-all duration-300 whitespace-nowrap shadow-sm border-2",
                 activeTab === tab.id 
-                  ? "bg-teal-50 dark:bg-teal-500/10 border-teal-500 text-teal-700 dark:text-teal-400 shadow-teal-500/20 shadow-md transform scale-[1.02]" 
-                  : "bg-white dark:bg-zinc-900 border-zinc-200 dark:border-zinc-800 text-zinc-600 dark:text-zinc-400 hover:border-teal-300 dark:hover:border-teal-700 hover:text-zinc-900 dark:hover:text-zinc-100 hover:shadow-md"
+                  ? "bg-gradient-to-br from-teal-500 to-emerald-600 text-white border-transparent shadow-teal-500/30 shadow-xl transform scale-105 ring-4 ring-teal-500/20" 
+                  : "bg-white/80 dark:bg-zinc-900/80 backdrop-blur-sm border-zinc-200 dark:border-zinc-800 text-zinc-600 dark:text-zinc-400 hover:border-teal-400 dark:hover:border-teal-600 hover:text-zinc-900 dark:hover:text-white hover:bg-zinc-50 dark:hover:bg-zinc-800 hover:shadow-lg hover:-translate-y-1"
               )}
             >
-              {tab.icon}
-              {tab.label}
+              <div className={cn(
+                "p-2 rounded-xl transition-colors duration-300",
+                activeTab === tab.id 
+                  ? "bg-white/20 text-white" 
+                  : "bg-zinc-100 dark:bg-zinc-800 text-zinc-500 dark:text-zinc-400 group-hover:bg-teal-100 dark:group-hover:bg-teal-900/30 group-hover:text-teal-600 dark:group-hover:text-teal-400"
+              )}>
+                {tab.icon}
+              </div>
+              <span className="tracking-wide uppercase text-sm">{tab.label}</span>
             </button>
           ))}
       </div>

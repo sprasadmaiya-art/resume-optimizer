@@ -99,7 +99,7 @@ export default function Home() {
           initial={{ opacity: 0, y: 20 }}
           animate={{ opacity: 1, y: 0 }}
           transition={{ duration: 0.5, delay: 0.1 }}
-          className="text-5xl md:text-7xl font-extrabold tracking-tight leading-[1.1] font-heading max-w-4xl"
+          className="text-6xl md:text-8xl font-black tracking-tight leading-[1.05] font-heading max-w-5xl"
         >
           Upload your Resume. <br className="hidden md:block" />
           <span className="bg-clip-text text-transparent bg-gradient-to-r from-indigo-500 via-purple-500 to-teal-400">Get Optimized.</span>
@@ -109,7 +109,7 @@ export default function Home() {
           initial={{ opacity: 0, y: 20 }}
           animate={{ opacity: 1, y: 0 }}
           transition={{ duration: 0.5, delay: 0.2 }}
-          className="mt-6 text-lg md:text-xl text-zinc-600 dark:text-zinc-400 max-w-2xl mx-auto leading-relaxed"
+          className="mt-8 text-xl md:text-2xl text-zinc-600 dark:text-zinc-400 max-w-3xl mx-auto leading-relaxed font-medium"
         >
           Practice your interview with the AI recruiter that just analyzed your resume against the job description. Get an instant ATS Score and tailored feedback.
         </motion.p>
@@ -436,8 +436,8 @@ export default function Home() {
         <div className="absolute inset-0 bg-[radial-gradient(ellipse_at_center,_var(--tw-gradient-stops))] from-teal-900/40 via-zinc-900 to-zinc-900 dark:from-teal-900/20 dark:via-black dark:to-black z-0"></div>
         
         <div className="max-w-4xl mx-auto relative z-10 text-center">
-          <h2 className="text-4xl md:text-5xl font-heading font-extrabold mb-6 text-white tracking-tight">Ready to elevate your career?</h2>
-          <p className="text-xl text-zinc-400 mb-10 max-w-2xl mx-auto">Join thousands of professionals landing their dream roles with precision-engineered AI intelligence.</p>
+          <h2 className="text-5xl md:text-6xl font-heading font-black mb-6 text-white tracking-tight">Ready to elevate your career?</h2>
+          <p className="text-2xl text-zinc-400 mb-10 max-w-3xl mx-auto font-medium">Join thousands of professionals landing their dream roles with precision-engineered AI intelligence.</p>
           <Show when="signed-out">
             <SignUpButton mode="modal">
               <button className="px-8 py-4 rounded-full bg-white text-zinc-900 font-bold text-lg hover:scale-105 transition-all shadow-2xl shadow-white/10 hover:shadow-white/20">
@@ -478,9 +478,9 @@ function FeatureShowcase({ title, subtitle, description, icon, imageContent, rev
         <div className="w-12 h-12 rounded-xl bg-white dark:bg-zinc-900 border border-zinc-200 dark:border-zinc-800 shadow-sm flex items-center justify-center mb-6">
           {icon}
         </div>
-        <h3 className="text-3xl md:text-4xl font-heading font-bold tracking-tight text-zinc-900 dark:text-white">{title}</h3>
-        <p className="text-lg font-medium text-teal-600 dark:text-teal-400">{subtitle}</p>
-        <p className="text-lg text-zinc-600 dark:text-zinc-400 leading-relaxed">{description}</p>
+        <h3 className="text-4xl md:text-5xl font-heading font-black tracking-tight text-zinc-900 dark:text-white">{title}</h3>
+        <p className="text-xl md:text-2xl font-bold text-teal-600 dark:text-teal-400">{subtitle}</p>
+        <p className="text-xl text-zinc-600 dark:text-zinc-400 leading-relaxed font-medium">{description}</p>
         <ul className="space-y-3 mt-8">
           <li className="flex items-center gap-3 text-zinc-700 dark:text-zinc-300 font-medium"><CheckCircle2 className="w-5 h-5 text-teal-500 shrink-0" /> Enterprise-grade AI Analysis</li>
           <li className="flex items-center gap-3 text-zinc-700 dark:text-zinc-300 font-medium"><CheckCircle2 className="w-5 h-5 text-teal-500 shrink-0" /> Instant actionable feedback</li>
