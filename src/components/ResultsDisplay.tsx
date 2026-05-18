@@ -37,61 +37,7 @@ export default function ResultsDisplay({ results }: ResultsDisplayProps) {
     posthog.capture(`viewed_tab_${tabId}`);
   };
 
-  const handleExportTXT = () => {
-    if (!results.optimization) return;
-    const element = document.createElement("a");
-    const file = new Blob([results.optimization.optimizedResume], { type: "text/plain" });
-    element.href = URL.createObjectURL(file);
-    element.download = "Optimized_Resume.txt";
-    document.body.appendChild(element);
-    element.click();
-    document.body.removeChild(element);
-    posthog.capture("export_txt_clicked");
-  };
-
-  const handleExportFullReportPDF = async () => {
-    setIsExporting(true);
-    posthog.capture("export_full_report_pdf_clicked");
-    
-    try {
-      const pdf = new jsPDF({ orientation: "portrait", unit: "pt", format: "letter" });
-      const margin = 40;
-      const pdfWidth = pdf.internal.pageSize.getWidth() - (margin * 2);
-      let y = margin;
-
-      const addText = (text: string, isHeader = false) => {
-        pdf.setFont("helvetica", isHeader ? "bold" : "normal");
-        pdf.setFontSize(isHeader ? 16 : 11);
-        const lines = pdf.splitTextToSize(text, pdfWidth);
-        for (let i = 0; i < lines.length; i++) {
-          if (y > pdf.internal.pageSize.getHeight() - margin) {
-            pdf.addPage();
-            y = margin;
-          }
-          pdf.text(lines[i], margin, y);
-          y += isHeader ? 24 : 16;
-        }
-        if (!isHeader) y += 10;
-      };
-
-      addText("AI Career Intelligence Report", true);
-      addText(`Job Match Score: ${results.match?.atsScore} / 100`);
-      addText(`Interview Readiness: ${results.interviewPrep?.readinessPercentage}%`);
-      y += 20;
-
-      if (results.optimization?.optimizedResume) {
-        addText("Optimized Resume", true);
-        addText(results.optimization.optimizedResume);
-      }
-
-      pdf.save("Career_Intelligence_Report.pdf");
-    } catch (error) {
-      console.error("Error generating PDF:", error);
-      alert("Failed to generate PDF. Please try TXT export instead.");
-    } finally {
-      setIsExporting(false);
-    }
-  };
+  // Global export functions have been removed in favor of localized PDF downloads
 
   return (
     <div className="w-full max-w-5xl mx-auto space-y-8 mt-16 mb-24">
@@ -100,24 +46,6 @@ export default function ResultsDisplay({ results }: ResultsDisplayProps) {
         <div>
           <h2 className="text-3xl font-extrabold text-zinc-900 tracking-tight">Career Intelligence Dashboard</h2>
           <p className="text-zinc-600 mt-2 text-lg">Your personalized career and interview strategy.</p>
-        </div>
-        
-        <div className="flex flex-wrap gap-3">
-          <button
-            onClick={handleExportTXT}
-            className="flex items-center gap-2 px-4 py-2 bg-white border border-zinc-200 text-zinc-700 rounded-lg hover:bg-zinc-50 transition-colors shadow-sm text-sm font-medium"
-          >
-            <FileText className="w-4 h-4" />
-            Resume (TXT)
-          </button>
-          <button
-            onClick={handleExportFullReportPDF}
-            disabled={isExporting}
-            className="flex items-center gap-2 px-4 py-2 bg-teal-600 text-white rounded-lg hover:bg-teal-700 transition-colors shadow-sm text-sm font-medium disabled:opacity-70"
-          >
-            <FileDown className="w-4 h-4" />
-            {isExporting ? "Generating..." : "Full Report (PDF)"}
-          </button>
         </div>
       </div>
 
@@ -161,6 +89,7 @@ export default function ResultsDisplay({ results }: ResultsDisplayProps) {
                   title="Optimized Resume" 
                   content={results.optimization.optimizedResume} 
                   contentRef={resumeRef}
+                  showDownload={true}
                 />
                 <ResultCard title="LinkedIn About Section" content={results.optimization.linkedinAbout} />
                 <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
@@ -175,7 +104,7 @@ export default function ResultsDisplay({ results }: ResultsDisplayProps) {
   );
 }
 
-function ResultCard({ title, content, contentRef }: { title: string; content: string; contentRef?: React.RefObject<HTMLPreElement | null> }) {
+function ResultCard({ title, content, contentRef, showDownload = false }: { title: string; content: string; contentRef?: React.RefObject<HTMLPreElement | null>; showDownload?: boolean }) {
   const [copied, setCopied] = useState(false);
   const [expanded, setExpanded] = useState(true);
 
@@ -185,11 +114,40 @@ function ResultCard({ title, content, contentRef }: { title: string; content: st
     setTimeout(() => setCopied(false), 2000);
   };
 
+  const handleDownloadPDF = () => {
+    const pdf = new jsPDF({ orientation: "portrait", unit: "pt", format: "letter" });
+    const margin = 40;
+    const pdfWidth = pdf.internal.pageSize.getWidth() - (margin * 2);
+    let y = margin;
+
+    pdf.setFont("helvetica", "normal");
+    pdf.setFontSize(11);
+    const lines = pdf.splitTextToSize(content, pdfWidth);
+    for (let i = 0; i < lines.length; i++) {
+      if (y > pdf.internal.pageSize.getHeight() - margin) {
+        pdf.addPage();
+        y = margin;
+      }
+      pdf.text(lines[i], margin, y);
+      y += 16;
+    }
+    pdf.save(`${title.replace(/\s+/g, "_")}.pdf`);
+  };
+
   return (
     <div className="glass-card overflow-hidden border border-zinc-200">
       <div className="flex items-center justify-between p-4 border-b border-zinc-200 bg-zinc-50/50">
         <h3 className="font-semibold text-lg text-zinc-800">{title}</h3>
         <div className="flex items-center gap-2">
+          {showDownload && (
+            <button
+              onClick={handleDownloadPDF}
+              className="p-2 hover:bg-zinc-200/50 rounded-lg transition-colors text-zinc-500 hover:text-zinc-800"
+              title="Download PDF"
+            >
+              <FileDown className="w-4 h-4" />
+            </button>
+          )}
           <button
             onClick={handleCopy}
             className="p-2 hover:bg-zinc-200/50 rounded-lg transition-colors text-zinc-500 hover:text-zinc-800"
