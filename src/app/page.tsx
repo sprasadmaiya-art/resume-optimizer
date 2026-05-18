@@ -186,20 +186,20 @@ export default function Home() {
                    </div>
                 </div>
 
-                {/* Keyword Match Card */}
+                {/* Skills Match Card */}
                 <div className="glass-card p-6 bg-white/80 dark:bg-zinc-900/80 rounded-xl border border-white/60 dark:border-white/5 h-48 flex flex-col justify-between shadow-sm">
                    <div>
-                     <p className="text-sm text-zinc-500 dark:text-zinc-400 font-medium mb-4 uppercase tracking-widest">Keyword Delta</p>
+                     <p className="text-sm text-zinc-500 dark:text-zinc-400 font-medium mb-4 uppercase tracking-widest">Skills Match</p>
                      <div className="space-y-4">
-                       {['React.js', 'System Design', 'TypeScript'].map((skill, i) => (
+                       {['Project Management', 'Data Analysis', 'Leadership'].map((skill, i) => (
                          <div key={i} className="flex items-center gap-3">
-                           <span className="text-xs text-zinc-700 dark:text-zinc-200 font-medium w-24">{skill}</span>
-                           <div className="w-full bg-zinc-100 dark:bg-zinc-800/80 rounded-full h-1.5 overflow-hidden">
+                           <span className="text-[11px] text-zinc-700 dark:text-zinc-200 font-bold w-24 uppercase tracking-wide">{skill}</span>
+                           <div className="w-full bg-zinc-100 dark:bg-zinc-800/80 rounded-full h-2 overflow-hidden shadow-inner">
                              <motion.div 
                                initial={{ width: 0 }}
                                whileInView={{ width: ['100%', '85%', '92%'][i] }}
                                transition={{ duration: 1.5, delay: 0.2 + i * 0.1, ease: "easeOut" }}
-                               className="bg-gradient-to-r from-indigo-500 to-purple-500 h-1.5 rounded-full"
+                               className="bg-gradient-to-r from-indigo-500 via-purple-500 to-teal-400 h-full rounded-full"
                              />
                            </div>
                          </div>
@@ -255,27 +255,39 @@ export default function Home() {
                  <div className="w-3 h-3 rounded-full bg-zinc-300 dark:bg-zinc-700"></div>
                  <div className="w-3 h-3 rounded-full bg-zinc-300 dark:bg-zinc-700"></div>
                </div>
-               <div className="space-y-6">
-                 <div className="h-6 w-1/2 bg-zinc-200 dark:bg-zinc-800 rounded-md"></div>
-                 <div className="space-y-3">
-                   <div className="h-3 w-full bg-zinc-100 dark:bg-zinc-800/50 rounded-md"></div>
-                   <div className="h-3 w-5/6 bg-zinc-100 dark:bg-zinc-800/50 rounded-md flex overflow-hidden">
-                      <span className="w-1/3 bg-indigo-100 dark:bg-indigo-900/40 border-b-2 border-indigo-400 dark:border-indigo-500 mr-1"></span>
-                      <span className="flex-1 bg-zinc-100 dark:bg-zinc-800/50"></span>
+               <div className="space-y-8 mt-2">
+                 {/* Before Section */}
+                 <div className="w-full relative group">
+                   <div className="flex items-center gap-2 mb-3">
+                     <span className="text-[10px] font-bold uppercase tracking-wider text-red-500 bg-red-100 dark:bg-red-500/10 px-2.5 py-1 rounded-full border border-red-200/50 dark:border-red-900/30">Original (Weak)</span>
                    </div>
-                   <div className="h-3 w-4/6 bg-zinc-100 dark:bg-zinc-800/50 rounded-md"></div>
-                 </div>
-                 <div className="space-y-3 pt-4">
-                   <div className="h-3 w-full bg-zinc-100 dark:bg-zinc-800/50 rounded-md"></div>
-                   <div className="h-3 w-[90%] bg-zinc-100 dark:bg-zinc-800/50 rounded-md flex overflow-hidden">
-                      <span className="flex-1 bg-zinc-100 dark:bg-zinc-800/50 mr-1"></span>
-                      <span className="w-1/4 bg-teal-100 dark:bg-teal-900/40 border-b-2 border-teal-400 dark:border-teal-500"></span>
-                   </div>
+                   <p className="text-sm text-zinc-400 dark:text-zinc-500 line-through decoration-red-500/40 decoration-2 pl-2 border-l-2 border-red-200 dark:border-red-900/50">
+                     Led a team of 5 to improve product sales and made the website load faster.
+                   </p>
                  </div>
                  
-                 <div className="absolute bottom-8 right-8 flex items-center gap-2 bg-indigo-50 dark:bg-indigo-500/10 border border-indigo-200 dark:border-indigo-500/20 px-4 py-2 rounded-full shadow-xl">
+                 {/* Connection Arrow */}
+                 <div className="flex justify-center -my-2 opacity-50 relative z-10">
+                    <div className="w-8 h-8 rounded-full bg-zinc-100 dark:bg-zinc-800 flex items-center justify-center shadow-sm border border-zinc-200 dark:border-zinc-700">
+                      <ChevronRight className="w-4 h-4 text-teal-500 transform rotate-90" />
+                    </div>
+                 </div>
+
+                 {/* After Section */}
+                 <div className="w-full relative">
+                   <div className="flex items-center gap-2 mb-3">
+                     <span className="text-[10px] font-bold uppercase tracking-wider text-teal-700 dark:text-teal-300 bg-teal-100 dark:bg-teal-900/30 px-2.5 py-1 rounded-full border border-teal-200 dark:border-teal-800 shadow-sm flex items-center gap-1.5">
+                       <Sparkles className="w-3 h-3" /> AI Optimized
+                     </span>
+                   </div>
+                   <p className="text-[15px] font-medium text-zinc-800 dark:text-zinc-200 leading-relaxed bg-gradient-to-br from-teal-50/80 to-white/80 dark:from-teal-900/20 dark:to-zinc-900/50 p-4 rounded-xl border border-teal-100 dark:border-teal-900/30 shadow-md">
+                     <span className="text-teal-800 dark:text-teal-200 font-bold bg-teal-200/50 dark:bg-teal-800/50 px-1.5 py-0.5 rounded shadow-sm mx-0.5">Directed</span> a cross-functional team of 5 to drive <span className="text-teal-800 dark:text-teal-200 font-bold bg-teal-200/50 dark:bg-teal-800/50 px-1.5 py-0.5 rounded shadow-sm mx-0.5">30% YoY revenue growth</span> and optimize web performance, reducing load times by <span className="text-teal-800 dark:text-teal-200 font-bold bg-teal-200/50 dark:bg-teal-800/50 px-1.5 py-0.5 rounded shadow-sm mx-0.5">40%</span>.
+                   </p>
+                 </div>
+                 
+                 <div className="absolute bottom-6 right-6 flex items-center gap-2 bg-white/95 dark:bg-zinc-900/95 backdrop-blur-md border border-indigo-200/50 dark:border-indigo-500/20 px-4 py-2.5 rounded-full shadow-xl hover:scale-105 transition-transform cursor-default z-20">
                    <Sparkles className="w-4 h-4 text-indigo-600 dark:text-indigo-400" />
-                   <span className="text-xs font-bold uppercase tracking-wider text-indigo-700 dark:text-indigo-300">Optimized by AI</span>
+                   <span className="text-xs font-bold uppercase tracking-wider text-indigo-700 dark:text-indigo-300">Action Verbs Injected</span>
                  </div>
                </div>
             </motion.div>

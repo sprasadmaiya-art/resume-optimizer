@@ -8,25 +8,25 @@ function fixConnectionString(url: string | undefined) {
   try {
     const protocolSplit = url.indexOf("://");
     if (protocolSplit === -1) return url;
-    
+
     const protocol = url.substring(0, protocolSplit + 3);
     const rest = url.substring(protocolSplit + 3);
-    
+
     const lastAtIdx = rest.lastIndexOf("@");
     if (lastAtIdx === -1) return url;
-    
+
     const credentials = rest.substring(0, lastAtIdx);
     const hostPart = rest.substring(lastAtIdx + 1);
-    
+
     const colonIdx = credentials.indexOf(":");
     if (colonIdx === -1) return url;
-    
+
     const user = credentials.substring(0, colonIdx);
     const password = credentials.substring(colonIdx + 1);
-    
+
     let decodedPassword = password;
-    try { decodedPassword = decodeURIComponent(password); } catch(e) {}
-    
+    try { decodedPassword = decodeURIComponent(password); } catch (e) { }
+
     const encodedPassword = encodeURIComponent(decodedPassword);
     return `${protocol}${user}:${encodedPassword}@${hostPart}`;
   } catch (e) {
@@ -36,18 +36,18 @@ function fixConnectionString(url: string | undefined) {
 
 const prismaClientSingleton = () => {
   const connectionString = fixConnectionString(process.env.DATABASE_URL);
-  
+
   // CRITICAL: Prisma's Rust engine still reads process.env.DATABASE_URL directly for validation
   // even when using an adapter. We MUST override it so the Rust engine doesn't crash on unencoded '@' symbols.
   process.env.DATABASE_URL = connectionString;
-  
+
   // Next.js Edge / Vercel requires explicit SSL configuration for Supabase and other cloud providers
-  const pool = new Pool({ 
+  const pool = new Pool({
     connectionString,
     ssl: process.env.NODE_ENV === "production" ? { rejectUnauthorized: false } : undefined
   });
   const adapter = new PrismaPg(pool);
-  
+
   return new PrismaClient({ adapter });
 };
 
