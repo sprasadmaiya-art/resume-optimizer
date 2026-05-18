@@ -1,6 +1,7 @@
 import { NextResponse } from "next/server";
 import { GoogleGenAI } from "@google/genai";
 import { auth } from "@clerk/nextjs/server";
+import { prisma } from "@/lib/prisma";
 
 // Allow longer execution time for the massive prompt (Vercel specific)
 export const maxDuration = 60;
@@ -113,7 +114,24 @@ Provide a harsh but constructive, deeply insightful analysis. Provide the raw JS
       throw new Error("The AI returned an invalid response format.");
     }
 
-    return NextResponse.json(parsedData);
+    if (!userId) {
+      throw new Error("User must be logged in to save optimizations.");
+    }
+
+    // Save the optimization session to the database
+    const session = await prisma.optimizationSession.create({
+      data: {
+        userId: userId,
+        role: role,
+        originalResume: resume,
+        jobDescription: jobDescription,
+        skills: skills || [],
+        atsScore: parsedData?.match?.atsScore || null,
+        results: parsedData,
+      },
+    });
+
+    return NextResponse.json({ ...parsedData, sessionId: session.id });
   } catch (error: any) {
     console.error("Error optimizing resume:", error);
     return NextResponse.json(
