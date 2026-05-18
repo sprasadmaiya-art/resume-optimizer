@@ -24,6 +24,7 @@ export default async function HistoryDetailPage({
   }
 
   let session = null;
+  let dbError = false;
 
   try {
     session = await prisma.optimizationSession.findUnique({
@@ -31,7 +32,27 @@ export default async function HistoryDetailPage({
     });
   } catch (error) {
     console.error(error);
-    return null;
+    dbError = true;
+  }
+
+  if (dbError) {
+    return (
+      <div className="space-y-8">
+        <Link
+          href="/dashboard/history"
+          className="inline-flex items-center gap-2 text-zinc-500 hover:text-zinc-900 dark:hover:text-white mb-6 transition-colors"
+        >
+          <ArrowLeft className="w-4 h-4" />
+          Back to History
+        </Link>
+        <div className="glass-card p-12 text-center border border-red-200 dark:border-red-900/50 bg-red-50/50 dark:bg-red-900/10">
+          <h3 className="text-xl font-bold text-red-900 dark:text-red-400 mb-2">Database Error</h3>
+          <p className="text-red-700 dark:text-red-300">
+            We couldn't connect to the database to load this session. Please try again later.
+          </p>
+        </div>
+      </div>
+    );
   }
 
   if (!session) {

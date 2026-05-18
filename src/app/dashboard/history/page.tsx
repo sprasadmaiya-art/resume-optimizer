@@ -12,10 +12,18 @@ export default async function HistoryPage() {
     return null;
   }
 
-  const sessions = await prisma.optimizationSession.findMany({
-    where: { userId },
-    orderBy: { createdAt: "desc" },
-  });
+  let sessions: any[] = [];
+  let dbError = false;
+
+  try {
+    sessions = await prisma.optimizationSession.findMany({
+      where: { userId },
+      orderBy: { createdAt: "desc" },
+    });
+  } catch (error) {
+    console.error("Database connection failed:", error);
+    dbError = true;
+  }
 
   return (
     <div className="space-y-8">
@@ -26,7 +34,15 @@ export default async function HistoryPage() {
         </p>
       </div>
 
-      {sessions.length === 0 ? (
+      {dbError ? (
+        <div className="glass-card p-12 text-center border border-red-200 dark:border-red-900/50 bg-red-50/50 dark:bg-red-900/10">
+          <Target className="w-12 h-12 text-red-400 dark:text-red-500 mx-auto mb-4" />
+          <h3 className="text-xl font-bold text-red-900 dark:text-red-400 mb-2">Database Connection Error</h3>
+          <p className="text-red-700 dark:text-red-300 mb-6 max-w-lg mx-auto">
+            We couldn't connect to the database to load your history. This usually means the database server is sleeping or unavailable. Please check your database connection string in Vercel.
+          </p>
+        </div>
+      ) : sessions.length === 0 ? (
         <div className="glass-card p-12 text-center border border-zinc-200 dark:border-zinc-800">
           <FileText className="w-12 h-12 text-zinc-300 dark:text-zinc-700 mx-auto mb-4" />
           <h3 className="text-xl font-bold text-zinc-900 dark:text-white mb-2">No history yet</h3>
