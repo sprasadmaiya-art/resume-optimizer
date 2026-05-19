@@ -1,6 +1,7 @@
 import { UserButton } from "@clerk/nextjs";
 import Link from "next/link";
 import { Briefcase, History, LayoutDashboard, Plus, Sparkles } from "lucide-react";
+import { Logo } from "../../components/Logo";
 
 export default function DashboardLayout({
   children,
@@ -13,8 +14,8 @@ export default function DashboardLayout({
       <header className="h-16 border-b border-zinc-200 dark:border-zinc-800 bg-white/50 dark:bg-zinc-900/50 backdrop-blur-md flex items-center justify-between px-6 flex-shrink-0 z-50 sticky top-0">
         <div className="flex items-center gap-8">
           <Link href="/" className="flex items-center gap-2 font-heading font-bold text-xl text-zinc-900 dark:text-white hover:opacity-80 transition-opacity">
-            <Sparkles className="w-5 h-5 text-teal-500" />
-            <span>CareerOS</span>
+            <Logo className="w-6 h-6" />
+            <span>VertaMatch</span>
           </Link>
           
           <nav className="hidden sm:flex items-center gap-6">

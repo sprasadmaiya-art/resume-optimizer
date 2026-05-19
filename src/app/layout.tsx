@@ -10,7 +10,7 @@ const inter = Inter({ subsets: ["latin"], variable: "--font-inter" });
 const outfit = Outfit({ subsets: ["latin"], variable: "--font-outfit" });
 
 export const metadata: Metadata = {
-  title: "AI Career Intelligence Platform",
+  title: "VertaMatch | AI Career Intelligence Platform",
   description: "Optimize your resume and LinkedIn profile with AI. Get instant recruiter feedback, customized interview prep, and deep job matching.",
   verification: {
     google: "n1vEJ5TDbUtkniHrf6BBba-FUsNhrQ_lfxKAHiwalcQ",

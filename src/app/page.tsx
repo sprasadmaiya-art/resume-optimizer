@@ -5,6 +5,7 @@ import { motion } from "framer-motion";
 import { useTheme } from "next-themes";
 import { SignInButton, SignUpButton, UserButton, Show } from "@clerk/nextjs";
 import Link from "next/link";
+import { Logo } from "../components/Logo";
 import { 
   Sparkles, 
   FileText, 
@@ -49,10 +50,8 @@ function Navbar() {
     <nav className="fixed top-0 w-full z-50 glass border-b border-zinc-200/50 dark:border-zinc-800/50">
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 h-16 flex items-center justify-between">
         <div className="flex items-center gap-2 font-heading font-bold text-xl text-zinc-900 dark:text-white">
-          <div className="w-8 h-8 rounded-lg bg-gradient-to-br from-teal-400 to-indigo-600 flex items-center justify-center shadow-lg shadow-teal-500/20">
-            <Sparkles className="w-4 h-4 text-white" />
-          </div>
-          <span>CareerOS</span>
+          <Logo className="w-8 h-8" />
+          <span>VertaMatch</span>
         </div>
         <div className="flex items-center gap-4">
           <ThemeToggle />
@@ -456,10 +455,10 @@ export default function Home() {
       {/* --- FOOTER --- */}
       <footer className="py-12 text-center bg-zinc-900 dark:bg-black border-t border-zinc-800 text-zinc-500 text-sm relative z-10">
          <div className="flex items-center justify-center gap-2 mb-4">
-            <Sparkles className="w-4 h-4" />
-            <span className="font-heading font-bold text-zinc-400">CareerOS</span>
+            <Logo className="w-5 h-5 text-zinc-400 opacity-80" />
+            <span className="font-heading font-bold text-zinc-400">VertaMatch</span>
          </div>
-         <p>© {new Date().getFullYear()} CareerOS Intelligence. All rights reserved.</p>
+         <p>© {new Date().getFullYear()} VertaMatch Intelligence. All rights reserved.</p>
       </footer>
     </div>
   );

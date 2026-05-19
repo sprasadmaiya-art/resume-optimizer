@@ -184,17 +184,20 @@ export default function CareerRecommendations({ data }: CareerRecommendationsPro
             </h3>
             <div className="grid grid-cols-1 gap-3">
               {data.recommendedCertifications.map((cert, idx) => (
-                <motion.div 
+                <motion.a 
                   key={idx}
+                  href={`https://www.google.com/search?q=${encodeURIComponent("best " + cert + " certification")}`}
+                  target="_blank"
+                  rel="noopener noreferrer"
                   whileHover={{ scale: 1.02 }}
-                  className="flex items-center justify-between p-4 rounded-2xl bg-zinc-50 dark:bg-zinc-800/80 border border-zinc-200 dark:border-zinc-700/50 group cursor-default"
+                  className="flex items-center justify-between p-4 rounded-2xl bg-zinc-50 dark:bg-zinc-800/80 border border-zinc-200 dark:border-zinc-700/50 group cursor-pointer transition-shadow hover:shadow-md"
                 >
                   <div className="flex items-center gap-3">
                     <BookOpen className="w-5 h-5 text-yellow-500" />
                     <span className="font-bold text-sm text-zinc-800 dark:text-zinc-200">{cert}</span>
                   </div>
                   <ArrowRight className="w-4 h-4 text-zinc-400 group-hover:text-yellow-500 transition-colors" />
-                </motion.div>
+                </motion.a>
               ))}
             </div>
           </motion.div>
