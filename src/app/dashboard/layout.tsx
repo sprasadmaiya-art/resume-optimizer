@@ -13,9 +13,11 @@ export default function DashboardLayout({
       {/* Topbar */}
       <header className="h-16 border-b border-zinc-200 dark:border-zinc-800 bg-white/50 dark:bg-zinc-900/50 backdrop-blur-md flex items-center justify-between px-6 flex-shrink-0 z-50 sticky top-0">
         <div className="flex items-center gap-8">
-          <Link href="/" className="flex items-center gap-2 font-heading font-bold text-xl text-zinc-900 dark:text-white hover:opacity-80 transition-opacity">
+          <Link href="/" className="flex items-center gap-2.5 font-heading text-xl tracking-tight hover:opacity-80 transition-opacity">
             <Logo className="w-6 h-6" />
-            <span>VertaMatch</span>
+            <span className="text-zinc-900 dark:text-white font-black">
+              Verta<span className="text-teal-600 dark:text-teal-500 font-bold">Match</span>
+            </span>
           </Link>
           
           <nav className="hidden sm:flex items-center gap-6">

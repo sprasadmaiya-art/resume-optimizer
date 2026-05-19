@@ -49,9 +49,11 @@ function Navbar() {
   return (
     <nav className="fixed top-0 w-full z-50 glass border-b border-zinc-200/50 dark:border-zinc-800/50">
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 h-16 flex items-center justify-between">
-        <div className="flex items-center gap-2 font-heading font-bold text-xl text-zinc-900 dark:text-white">
+        <div className="flex items-center gap-2.5 font-heading text-2xl tracking-tighter">
           <Logo className="w-8 h-8" />
-          <span>VertaMatch</span>
+          <span className="text-zinc-900 dark:text-white font-black">
+            Verta<span className="text-teal-600 dark:text-teal-500 font-bold">Match</span>
+          </span>
         </div>
         <div className="flex items-center gap-4">
           <ThemeToggle />
@@ -456,7 +458,9 @@ export default function Home() {
       <footer className="py-12 text-center bg-zinc-900 dark:bg-black border-t border-zinc-800 text-zinc-500 text-sm relative z-10">
          <div className="flex items-center justify-center gap-2 mb-4">
             <Logo className="w-5 h-5 text-zinc-400 opacity-80" />
-            <span className="font-heading font-bold text-zinc-400">VertaMatch</span>
+            <span className="font-heading tracking-tight text-lg">
+              <span className="text-zinc-400 font-black">Verta</span><span className="text-zinc-500 font-bold">Match</span>
+            </span>
          </div>
          <p>© {new Date().getFullYear()} VertaMatch Intelligence. All rights reserved.</p>
       </footer>
