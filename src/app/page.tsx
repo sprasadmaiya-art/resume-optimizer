@@ -348,7 +348,7 @@ export default function Home() {
                    <Sparkles className="w-5 h-5 text-white" />
                 </div>
                 <div>
-                  <h4 className="font-bold text-zinc-900 dark:text-white">Alex (AI Recruiter)</h4>
+                  <h4 className="font-bold text-zinc-900 dark:text-white">Vera (AI Recruiter)</h4>
                   <p className="text-xs text-zinc-500 dark:text-zinc-400 flex items-center gap-1"><span className="w-2 h-2 rounded-full bg-green-500"></span> Online</p>
                 </div>
               </div>

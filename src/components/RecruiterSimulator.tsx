@@ -184,7 +184,7 @@ export default function RecruiterSimulator({ data }: RecruiterSimulatorProps) {
         </div>
         <div>
           <h2 className="text-xl font-bold text-zinc-900 dark:text-white flex items-center gap-2">
-            Alex (AI Recruiter) 
+            Vera (AI Recruiter) 
             <span className="px-2 py-0.5 rounded-full bg-purple-100 dark:bg-purple-900/30 text-[10px] text-purple-600 dark:text-purple-400 font-bold uppercase tracking-wider border border-purple-200 dark:border-purple-800">
               Online
             </span>
