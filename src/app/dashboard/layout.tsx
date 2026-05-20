@@ -2,6 +2,7 @@ import { UserButton } from "@clerk/nextjs";
 import Link from "next/link";
 import { Briefcase, History, LayoutDashboard, Plus, Sparkles } from "lucide-react";
 import { Logo } from "../../components/Logo";
+import { DashboardNav } from "../../components/DashboardNav";
 
 export default function DashboardLayout({
   children,
@@ -20,16 +21,7 @@ export default function DashboardLayout({
             </span>
           </Link>
           
-          <nav className="hidden sm:flex items-center gap-6">
-            <Link href="/dashboard/optimize" className="flex items-center gap-2 text-sm font-bold text-zinc-600 dark:text-zinc-400 hover:text-teal-600 dark:hover:text-teal-400 transition-colors">
-              <Plus className="w-4 h-4" />
-              New Optimization
-            </Link>
-            <Link href="/dashboard/history" className="flex items-center gap-2 text-sm font-bold text-zinc-600 dark:text-zinc-400 hover:text-teal-600 dark:hover:text-teal-400 transition-colors">
-              <History className="w-4 h-4" />
-              History
-            </Link>
-          </nav>
+          <DashboardNav />
         </div>
         <div className="flex items-center gap-4">
           <UserButton />
