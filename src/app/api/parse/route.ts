@@ -1,8 +1,8 @@
 import { NextResponse } from "next/server";
 import mammoth from "mammoth";
 
-// Vercel serverless functions have a 4.5MB payload limit. We limit to 4MB here.
-const MAX_FILE_SIZE = 4 * 1024 * 1024; // 4MB
+// We increased the limit to 10MB per user request. Note: on Vercel, payloads >4.5MB might be blocked by the platform.
+const MAX_FILE_SIZE = 10 * 1024 * 1024; // 10MB
 
 export async function POST(req: Request) {
   try {
@@ -14,7 +14,7 @@ export async function POST(req: Request) {
     }
 
     if (file.size > MAX_FILE_SIZE) {
-      return NextResponse.json({ success: false, error: "File exceeds the 4MB limit." }, { status: 413 });
+      return NextResponse.json({ success: false, error: "File exceeds the 10MB limit." }, { status: 413 });
     }
 
     const buffer = Buffer.from(await file.arrayBuffer());

@@ -10,7 +10,7 @@ interface FileUploadProps {
   isLoading: boolean;
 }
 
-const MAX_FILE_SIZE = 4 * 1024 * 1024; // 4MB
+const MAX_FILE_SIZE = 10 * 1024 * 1024; // 10MB
 
 export default function FileUpload({ onTextExtracted, isLoading: externalLoading }: FileUploadProps) {
   const [isDragging, setIsDragging] = useState(false);
@@ -33,7 +33,7 @@ export default function FileUpload({ onTextExtracted, isLoading: externalLoading
     if (!file) return;
 
     if (file.size > MAX_FILE_SIZE) {
-      setError("File exceeds the 4MB limit. Please upload a smaller file.");
+      setError("File exceeds the 10MB limit. Please upload a smaller file.");
       return;
     }
 
@@ -124,7 +124,7 @@ export default function FileUpload({ onTextExtracted, isLoading: externalLoading
             <p className="text-sm font-medium text-zinc-700">
               {isLoading ? "Parsing resume..." : "Click to upload or drag and drop"}
             </p>
-            <p className="text-xs text-zinc-500 mt-1">PDF, DOCX, or TXT (max. 4MB)</p>
+            <p className="text-xs text-zinc-500 mt-1">PDF, DOCX, or TXT (max. 10MB)</p>
           </div>
         </div>
       </div>
