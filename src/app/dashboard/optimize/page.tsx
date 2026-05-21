@@ -51,7 +51,19 @@ export default function OptimizePage() {
         });
       }
     } catch (err: any) {
-      setError(err.message || "An unexpected error occurred.");
+      let errorMessage = err.message || "An unexpected error occurred.";
+      try {
+        // Attempt to parse if it's a JSON string (e.g., from Gemini API)
+        const parsed = JSON.parse(errorMessage);
+        if (parsed?.error?.message) {
+          errorMessage = parsed.error.message;
+        } else if (parsed?.message) {
+          errorMessage = parsed.message;
+        }
+      } catch (e) {
+        // Ignore parse error, use original message
+      }
+      setError(errorMessage);
     } finally {
       setIsLoading(false);
     }
