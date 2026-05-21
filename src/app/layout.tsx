@@ -17,6 +17,8 @@ export const metadata: Metadata = {
   },
 };
 
+import { Analytics } from "@vercel/analytics/react";
+
 export default function RootLayout({
   children,
 }: Readonly<{
@@ -36,6 +38,7 @@ export default function RootLayout({
               <div className="absolute bottom-[-10%] right-[-10%] w-[40%] h-[40%] rounded-full bg-indigo-400/10 blur-[120px] dark:bg-indigo-500/5" />
             </div>
             {children}
+            <Analytics />
           </CSPostHogProvider>
         </body>
       </html>
