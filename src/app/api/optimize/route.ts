@@ -11,6 +11,13 @@ const ai = new GoogleGenAI({ apiKey: process.env.GEMINI_API_KEY });
 export async function POST(req: Request) {
   try {
     const { userId } = await auth();
+    if (!userId) {
+      return NextResponse.json(
+        { error: "User must be logged in to generate optimizations." },
+        { status: 401 }
+      );
+    }
+
     const { resume, jobDescription, role, skills } = await req.json();
 
     if (!resume || !jobDescription || !role) {
@@ -112,10 +119,6 @@ Provide a harsh but constructive, deeply insightful analysis. Provide the raw JS
     } catch (parseError) {
       console.error("Failed to parse JSON response:", text);
       throw new Error("The AI returned an invalid response format.");
-    }
-
-    if (!userId) {
-      throw new Error("User must be logged in to save optimizations.");
     }
 
     // Save the optimization session to the database
